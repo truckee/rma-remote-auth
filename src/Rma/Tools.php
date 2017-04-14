@@ -22,7 +22,7 @@ class Tools
         if (isset($_POST['_email'])) {
             $email = $_POST['_email'];
             if (empty($email)) {
-                die('No email provided!');
+                echo 'No email provided!';
             }
             $url = get_option('rma_base_url');
             $get_hash = get_option('rma_get_hash');
