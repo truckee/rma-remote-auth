@@ -1,5 +1,4 @@
 <?php
-
 /**
   Plugin Name: Remote Member Authorization
   Plugin URI:  https://tbd
@@ -37,17 +36,18 @@ use Rma\SettingsPage;
 
 spl_autoload_register('rma_autoloader');
 
-function rma_autoloader($class_name) {
+function rma_autoloader($class_name)
+{
     if (false !== strpos($class_name, 'Rma')) {
         $classes_dir = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
         $class_file = str_replace('\\', DIRECTORY_SEPARATOR, $class_name) . '.php';
         require_once $classes_dir . $class_file;
     }
 }
-
 add_action('plugins_loaded', 'rma_init'); // Hook initialization function
 
-function rma_init() {
+function rma_init()
+{
     $plugin = new Plugin(); // Create container
     $plugin['path'] = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR;
     $plugin['url'] = plugin_dir_url(__FILE__);
@@ -77,10 +77,16 @@ function rma_init() {
         }
         return new SettingsPage($plugin['properties']);
     };
+    $templates = [
+        './Templates/member-content.php' => 'Restricted Member Content',
+    ];
+    $templater = new Rma\PageTemplater($templates);
     add_action('init', ['Rma\Tools', 'member_password_check']);
+    add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
     $plugin->run();
 }
 
-function queueScripts() {
-    wp_enqueue_script('whatever_works',  plugins_url( '/js/ouch.js', __FILE__ ), ['jquery'] );
+function queueScripts()
+{
+    wp_enqueue_script('whatever_works', plugins_url('/js/ouch.js', __FILE__), ['jquery']);
 }
