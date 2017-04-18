@@ -65,8 +65,8 @@ function rma_init()
             ['fieldName' => 'rma_base_url',
                 'label' => 'Base URL',
             ],
-            ['fieldName' => 'rma_get_hash',
-                'label' => 'Get password hash'],
+            ['fieldName' => 'rma_get_user',
+                'label' => 'Get user data'],
         ],
     ];
     $plugin['settings_page'] = function ( $plugin ) {
@@ -83,6 +83,7 @@ function rma_init()
     $templater = new Rma\PageTemplater($templates);
     add_action('init', ['Rma\Tools', 'member_password_check']);
     add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
+    add_shortcode('member_sign_in', ['Rma\Shortcodes\SigninForm', 'createSignInForm']);
     $plugin->run();
 }
 

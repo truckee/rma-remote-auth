@@ -16,8 +16,8 @@ class Fields
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_get_hash':
-                $name = 'rma_get_hash';
+            case 'rma_get_user':
+                $name = 'rma_get_user';
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
