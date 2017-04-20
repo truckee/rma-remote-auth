@@ -15,7 +15,34 @@ namespace Rma\Shortcodes;
  */
 class SigninForm
 {
-    static function createSignInForm() {
+
+    public static function createSignInForm() {
+        //allow for dynamic form on a static form call
+        return (new self)->signinForm();
+    }
+
+    public function signinForm() {
+        define('INVALID_EMAIL', 'Invalid email');
+        define('NOT_FOUND', 'Member credentials not found');
+        $email = '';
+        //retrieve entered email address if exists
+        if (isset($_SESSION['_email_address'])) {
+            $email = $_SESSION['_email_address'];
+            unset($_SESSION['_email_address']);
+        }
+        //was an invalid email entered?
+        $mailError = '';
+        if (isset($_SESSION['_email_error'])) {
+            $mailError = '</div><div class="row"><div class="col-md-7 text-danger">' . INVALID_EMAIL . '</div>';
+            //clear error
+            unset($_SESSION['_email_error']);
+        }
+        //were credentials not found?
+        $formError = '';
+        if (isset($_SESSION['rma_member_form_error'])) {
+            $formError = '<br><div class="row"><div class="col-md-7 text-danger">' . NOT_FOUND . '</div></div>';
+            unset($_SESSION['rma_member_form_error']);
+        }
         $form = <<<EOT
 <div class="panel panel-info">
     <div class="panel-heading">Member sign-in</div>
@@ -24,8 +51,11 @@ class SigninForm
             <input  type="hidden" name="action" value="member_sign_in">
             <div class="row">
                 <div class="col-md-4">Email address</div>
-                <div class="col-md-3"><input type="text" name="_email" /></div>
-            </div>
+EOT;
+        $form .= '<div class="col-md-3"><input type="text" name="_email" value="' . $email . '"/></div>' .
+                $mailError;
+        $formPassword = <<<EOT
+   </div>
             <br />
             <div class="row">
                 <div class="col-md-4">Password</div>
@@ -36,9 +66,10 @@ class SigninForm
                 <div class="col-md-4"><input type="submit" value="Sign in" /></div>
             </div>
         </form>
-    </div>
-</div>
 EOT;
+        $form .= $formPassword . $formError . '</div></div>';
+
         return $form;
     }
+
 }

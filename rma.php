@@ -80,8 +80,10 @@ function rma_init()
     $templates = [
         './Templates/member-content.php' => 'Restricted Member Content',
     ];
+    //initialization functions
     $templater = new Rma\PageTemplater($templates);
     add_action('init', ['Rma\Tools', 'member_password_check']);
+//    add_action( 'init', ['Rma\Tools', 'rma_signin'] );
     add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
     add_shortcode('member_sign_in', ['Rma\Shortcodes\SigninForm', 'createSignInForm']);
     $plugin->run();
