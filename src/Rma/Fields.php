@@ -9,15 +9,37 @@ namespace Rma;
  */
 class Fields
 {
+
     static function fieldHtml($field) {
         switch ($field['fieldName']) {
-            case 'rma_base_url':
-                $name = 'rma_base_url';
+            case 'rma_user_data_uri':
+                $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_get_user':
-                $name = 'rma_get_user';
+            case 'rma_auth_type':
+                $name = $field['fieldName'];
+                $value = get_option($name);
+                $fieldAPI = ($value == 'API key') ? "checked='checked' " : '';
+                $fieldBasic = ($value == 'HTTP Basic') ? "checked='checked' " : '';
+                echo "<input type='radio' id='$name' name='$name' value='API key' " .
+                $fieldAPI .
+                " />API key<br>";
+                echo "<input type='radio' id='$name' name='$name' value='HTTP Basic'" .
+                $fieldBasic . ' />HTTP Basic';
+                break;
+            case 'rma_auth_type_api_key':
+                $name = $field['fieldName'];
+                $value = get_option($name);
+                echo "<input type='text' id='$name' name='$name' value='$value' />";
+                break;
+            case 'rma_auth_type_basic_username':
+                $name = $field['fieldName'];
+                $value = get_option($name);
+                echo "<input type='text' id='$name' name='$name' value='$value' />";
+                break;
+            case 'rma_auth_type_basic_password':
+                $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;

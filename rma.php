@@ -1,4 +1,5 @@
 <?php
+
 /**
   Plugin Name: Remote Member Authorization
   Plugin URI:  https://tbd
@@ -36,18 +37,17 @@ use Rma\SettingsPage;
 
 spl_autoload_register('rma_autoloader');
 
-function rma_autoloader($class_name)
-{
+function rma_autoloader($class_name) {
     if (false !== strpos($class_name, 'Rma')) {
         $classes_dir = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
         $class_file = str_replace('\\', DIRECTORY_SEPARATOR, $class_name) . '.php';
         require_once $classes_dir . $class_file;
     }
 }
+
 add_action('plugins_loaded', 'rma_init'); // Hook initialization function
 
-function rma_init()
-{
+function rma_init() {
     $plugin = new Plugin(); // Create container
     $plugin['path'] = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR;
     $plugin['url'] = plugin_dir_url(__FILE__);
@@ -62,11 +62,17 @@ function rma_init()
         'section_heading' => '',
         'submit_label' => 'Save stuff',
         'options' => [
-            ['fieldName' => 'rma_base_url',
-                'label' => 'Base URL',
+            ['fieldName' => 'rma_user_data_uri',
+                'label' => 'User data URI',
             ],
-            ['fieldName' => 'rma_get_user',
-                'label' => 'Get user data'],
+            ['fieldName' => 'rma_auth_type',
+                'label' => 'Authentication type'],
+            ['fieldName' => 'rma_auth_type_api_key',
+                'label' => 'API key'],
+            ['fieldName' => 'rma_auth_type_basic_username',
+                'label' => 'Username'],
+            ['fieldName' => 'rma_auth_type_basic_password',
+                'label' => 'Password'],
         ],
     ];
     $plugin['settings_page'] = function ( $plugin ) {
@@ -83,13 +89,16 @@ function rma_init()
     //initialization functions
     $templater = new Rma\PageTemplater($templates);
     add_action('init', ['Rma\Tools', 'member_password_check']);
-//    add_action( 'init', ['Rma\Tools', 'rma_signin'] );
+    add_action( 'admin_enqueue_scripts', 'rmaQueueScripts' );
     add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
     add_shortcode('member_sign_in', ['Rma\Shortcodes\SigninForm', 'createSignInForm']);
     $plugin->run();
 }
 
-function queueScripts()
-{
-    wp_enqueue_script('whatever_works', plugins_url('/js/ouch.js', __FILE__), ['jquery']);
+function rmaQueueScripts($hook) {
+    //rmaQueueScripts
+    if ($hook != 'settings_page_rma-settings') {
+        return;
+    }
+    wp_enqueue_script('rma_js_script', plugins_url('/js/rma_settings.js', __FILE__), ['jquery']);
 }
