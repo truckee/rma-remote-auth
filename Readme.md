@@ -9,11 +9,13 @@ The particular use case prompting this plugin was a church WordPress website tha
 Once installed:
 
 - Configure settings
-	- Add URI for returning user data
+	- Select authentication type: API key, HTTP Basic Auth, or None
+		- For API key, enter your API key
+		- for HTTP Basic, enter the username and password for a user with search privileges
 - Create sign-in form
 	- Add new page with title "Sign in"
 	- Insert shortcode [member_sign_in]
 	- Publish page
 - Add restricted content
-	- Set template to "Restricted member content" 
+	- Set template to "Restricted member content" for each page of restricted content 
  

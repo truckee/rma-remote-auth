@@ -38,12 +38,18 @@ abstract class WpSubPage
         $group = $this->properties['option_group'];
         $options = $this->properties['options'];
         $page = $this->properties['menu_slug'];
-        add_settings_section($page . '_main', '', function() { echo $this->properties['section_heading'];}, $page);
+        add_settings_section($page . '_main', '', function() {
+            echo $this->properties['section_heading'];
+        }, $page);
         foreach ($options as $option) {
-            register_setting($group, $option['fieldName']);
-            add_settings_field($option['fieldName'], $option['label'],['Rma\Fields', 'fieldHtml'], $page, $page . '_main', ['fieldName' => $option['fieldName']]);
+            $fieldName = $option['fieldName'];
+            if (method_exists('Rma\Tools', 'validate_' . $fieldName)) {
+                register_setting($group, $fieldName, ['Rma\Tools', 'validate_' . $fieldName]);
+            } else {
+                register_setting($group, $fieldName);
+            }
+            add_settings_field($fieldName, $option['label'], ['Rma\Fields', 'fieldHtml'], $page, $page . '_main', ['fieldName' => $fieldName]);
         }
-
     }
 
     public function render_settings_page() {

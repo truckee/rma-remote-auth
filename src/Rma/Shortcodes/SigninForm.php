@@ -22,8 +22,21 @@ class SigninForm
     }
 
     public function signinForm() {
+        define('USER_DATA_URI_ERROR', 'User data URI not set');
         define('INVALID_EMAIL', 'Invalid email');
         define('NOT_FOUND', 'Member credentials not found');
+        if (empty(get_option('rma_user_data_uri'))) {
+            
+            $form = <<<EOT
+<div class="panel panel-info">
+    <div class="panel-heading">Member sign-in</div>
+    <div class="panel-body">
+                    <div class="row"><div class="col-md-7 text-danger">
+EOT;
+            $form .= USER_DATA_URI_ERROR;
+            $form .= '</div></div></div></div>';
+            return $form;
+        }
         $email = '';
         //retrieve entered email address if exists
         if (isset($_SESSION['_email_address'])) {

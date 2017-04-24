@@ -20,13 +20,16 @@ class Fields
             case 'rma_auth_type':
                 $name = $field['fieldName'];
                 $value = get_option($name);
+                $fieldNone = ($value == 'None') ? "checked='checked' " : '';
                 $fieldAPI = ($value == 'API key') ? "checked='checked' " : '';
                 $fieldBasic = ($value == 'HTTP Basic') ? "checked='checked' " : '';
                 echo "<input type='radio' id='$name' name='$name' value='API key' " .
                 $fieldAPI .
                 " />API key<br>";
                 echo "<input type='radio' id='$name' name='$name' value='HTTP Basic'" .
-                $fieldBasic . ' />HTTP Basic';
+                $fieldBasic . ' />HTTP Basic<br>';
+                echo "<input type='radio' id='$name' name='$name' value='None'" .
+                $fieldNone . ' />None';
                 break;
             case 'rma_auth_type_api_key':
                 $name = $field['fieldName'];

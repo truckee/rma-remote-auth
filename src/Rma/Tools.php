@@ -31,9 +31,8 @@ class Tools
                 //set error value to true
                 $_SESSION['_email_error'] = true;
             }
-            $url = get_option('rma_base_url');
-            $get_user = get_option('rma_get_user');
-            $getURI = $url . $get_user . '/' . $email;
+            $url = get_option('rma_user_data_uri');
+            $getURI = $url . '/' . $email;
             $data = wp_remote_get($getURI);
             $code = $data['response']['code'];
             if ('200' == $code) {
@@ -52,5 +51,47 @@ class Tools
             $_SESSION['rma_member_form_error'] = true;
         }
     }
-
+    
+    //validate User data URI
+    static function validate_rma_user_data_uri() {
+        $uri = filter_input(INPUT_POST, 'rma_user_data_uri');
+        $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
+        if ($uri !== $uriFiltered) {
+            $invalid = $uri . ' is an invalid User data URI';
+            $empty = 'User data URI may not be empty';
+            add_settings_error('rma_user_data_uri', 'rma_uri', (empty($uri) ? $empty : $invalid) );
+        }
+        
+        return $uri;
+    }
+    
+    //validate API key
+    static function validate_rma_auth_type_api_key() {
+        $key = filter_input(INPUT_POST, 'rma_auth_type_api_key');
+        if (empty($key) && 'API key' === filter_input(INPUT_POST, 'rma_auth_type')) {
+            add_settings_error('rma_auth_type_api_key', 'rma_key', 'API key may not be empty');
+        }
+        
+        return $key;
+    }
+    
+    //validate Username
+    static function validate_rma_auth_type_basic_username() {
+        $name = filter_input(INPUT_POST, 'rma_auth_type_basic_username');
+        if (empty($name) && 'HTTP Basic' === filter_input(INPUT_POST, 'rma_auth_type')) {
+            add_settings_error('rma_auth_type_basic_username', 'rma_name', 'Username may not be empty');
+        }
+        
+        return $name;
+    }
+    
+    //validate Password
+    static function validate_rma_auth_type_basic_password() {
+        $password = filter_input(INPUT_POST, 'rma_auth_type_basic_password');
+        if (empty($password) && 'HTTP Basic' === filter_input(INPUT_POST, 'rma_auth_type')) {
+            add_settings_error('rma_auth_type_basic_password', 'rma_name', 'Password may not be empty');
+        }
+        
+        return $password;
+    }
 }

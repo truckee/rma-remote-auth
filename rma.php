@@ -63,8 +63,7 @@ function rma_init() {
         'submit_label' => 'Save stuff',
         'options' => [
             ['fieldName' => 'rma_user_data_uri',
-                'label' => 'User data URI',
-            ],
+                'label' => 'User data URI',],
             ['fieldName' => 'rma_auth_type',
                 'label' => 'Authentication type'],
             ['fieldName' => 'rma_auth_type_api_key',
