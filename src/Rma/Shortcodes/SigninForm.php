@@ -22,10 +22,13 @@ class SigninForm
     }
 
     public function signinForm() {
-        define('USER_DATA_URI_ERROR', 'User data URI not set');
+        define('USER_DATA_URI_ERROR', 'Not allRMA options set');
         define('INVALID_EMAIL', 'Invalid email');
         define('NOT_FOUND', 'Member credentials not found');
-        if (empty(get_option('rma_user_data_uri'))) {
+        define('NOT_ACTIVE', 'Member not considered active');
+        
+        //show error if required options not set
+        if (empty(get_option('rma_user_data_uri')) || empty(get_option('rma_status_field_name')) || empty(get_option('rma_status_field_value'))) {
             
             $form = <<<EOT
 <div class="panel panel-info">
@@ -35,8 +38,26 @@ class SigninForm
 EOT;
             $form .= USER_DATA_URI_ERROR;
             $form .= '</div></div></div></div>';
+            
             return $form;
         }
+        
+        //if status error
+        if (isset($_SESSION['status_error']))
+        {
+            $form = <<<EOT
+<div class="panel panel-info">
+    <div class="panel-heading">Member sign-in</div>
+    <div class="panel-body">
+                    <div class="row"><div class="col-md-7 text-danger">
+EOT;
+            $form .= NOT_ACTIVE;
+            $form .= '</div></div></div></div>';
+            unset($_SESSION['status_error']);
+            
+            return $form;
+        }        
+        //present form now that no RMA option errors exist
         $email = '';
         //retrieve entered email address if exists
         if (isset($_SESSION['_email_address'])) {

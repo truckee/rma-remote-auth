@@ -105,7 +105,20 @@ class Tools
                 //if good data returned
                 $user = json_decode($data['body']);
                 $hash = $user[0]->password;
-                $password = $_POST['_password'];
+                $password = filter_input(INPUT_POST, '_password');
+                
+                //is user active?
+                $statusField = get_option('rma_status_field_name');
+                $statusValue = get_option('rma_status_field_value');
+                $userStatus = $user[0]->$statusField;
+                if ($userStatus != $statusValue) {
+                    //user not active; return to sign-in with error msg
+                    $_SESSION['status_error'] = true;
+                    wp_redirect(home_url('member-sign-in'));
+                    exit;
+                }
+                
+                //check active user's password
                 if (password_verify($password, $hash)) {
                     setcookie('rma_member', 'active', time() + 3600, COOKIEPATH, COOKIE_DOMAIN);
                     //remove all sign in data
