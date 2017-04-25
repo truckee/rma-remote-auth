@@ -66,6 +66,10 @@ function rma_init() {
                 'label' => 'User data URI',],
             ['fieldName' => 'rma_auth_type',
                 'label' => 'Authentication type'],
+            ['fieldName' => 'rma_status_field_name',
+                'label' => 'Status field name'],
+            ['fieldName' => 'rma_status_field_value',
+                'label' => 'Active status value'],
             ['fieldName' => 'rma_auth_type_api_key',
                 'label' => 'API key'],
             ['fieldName' => 'rma_auth_type_basic_username',
@@ -87,7 +91,7 @@ function rma_init() {
     ];
     //initialization functions
     $templater = new Rma\PageTemplater($templates);
-    add_action('init', ['Rma\Tools', 'member_password_check']);
+    add_action('init', ['Rma\Tools', 'validate_sign_in']);
     add_action( 'admin_enqueue_scripts', 'rmaQueueScripts' );
     add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
     add_shortcode('member_sign_in', ['Rma\Shortcodes\SigninForm', 'createSignInForm']);
