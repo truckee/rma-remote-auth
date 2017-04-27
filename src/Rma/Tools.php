@@ -65,6 +65,16 @@ class Tools
         return $key;
     }
 
+    //validate API key field name
+    static function validate_rma_auth_type_api_key_field_name() {
+        $key = filter_input(INPUT_POST, 'rma_auth_type_api_key_field_name');
+        if (empty($key) && 'API key' === filter_input(INPUT_POST, 'rma_auth_type')) {
+            add_settings_error('rma_auth_type_api_key_field_name', 'rma_key', 'API key field name may not be empty');
+        }
+
+        return $key;
+    }
+
     //validate Username
     static function validate_rma_auth_type_basic_username() {
         $name = filter_input(INPUT_POST, 'rma_auth_type_basic_username');
@@ -146,7 +156,12 @@ class Tools
         switch ($authType) {
             case 'API key':
                 $key = get_option('rma_auth_type_api_key');
-                $getURI = $url . '/' . $key . '/' . $email;
+                $keyName = get_option('rma_auth_type_api_key_field_name');
+                $args = array(
+                    'headers' => array(
+                        $keyName => $key
+                    )
+                );
                 break;
             case 'HTTP Basic':
                 $username = get_option('rma_auth_type_basic_username');
@@ -156,12 +171,15 @@ class Tools
                         'Authorization' => 'Basic ' . base64_encode($username . ':' . $password)
                     )
                 );
+                break;
             default:
-                $getURI = $uri . '/' . $email;
+                
                 break;
         }
-
+        $getURI = $uri . '/' . $email;
+//        var_dump($getURI, $args);die;
         $data = wp_remote_get($getURI, $args);
+//        var_dump($data);die;
 
         return $data;
     }

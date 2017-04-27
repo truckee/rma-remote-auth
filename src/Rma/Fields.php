@@ -44,6 +44,11 @@ class Fields
             case 'rma_auth_type_api_key':
                 $name = $field['fieldName'];
                 $value = get_option($name);
+                echo "<input type='text' id='$name' size='40' name='$name' value='$value' />";
+                break;
+            case 'rma_auth_type_api_key_field_name':
+                $name = $field['fieldName'];
+                $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
             case 'rma_auth_type_basic_username':
