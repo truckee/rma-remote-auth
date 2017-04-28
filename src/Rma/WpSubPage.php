@@ -43,8 +43,8 @@ abstract class WpSubPage
         }, $page);
         foreach ($options as $option) {
             $fieldName = $option['fieldName'];
-            if (method_exists('Rma\Tools', 'validate_' . $fieldName)) {
-                register_setting($group, $fieldName, ['Rma\Tools', 'validate_' . $fieldName]);
+            if (method_exists('Rma\Fields', 'validate_' . $fieldName)) {
+                register_setting($group, $fieldName, ['Rma\Fields', 'validate_' . $fieldName]);
             } else {
                 register_setting($group, $fieldName);
             }
