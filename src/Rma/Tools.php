@@ -37,8 +37,7 @@ class Tools
             }
             
             $data = $this->getData($email);
-            $code = $data['response']['code'];
-            if ('200' == $code) {
+            if (null !== $data &&  '200' == $data['response']['code']) {
                 //if good data returned
                 $user = json_decode($data['body']);
                 $hash = $user[0]->password;
