@@ -35,38 +35,42 @@ class Tools
                 //set error value to true
                 $_SESSION['_email_error'] = true;
             }
-            
+
             $data = $this->getData($email);
-            if (null !== $data &&  '200' == $data['response']['code']) {
+            if (null !== $data && '200' == $data['response']['code']) {
                 //if good data returned
                 $user = json_decode($data['body']);
                 $hash = $user[0]->password;
                 $password = filter_input(INPUT_POST, '_password');
-                
-                //is user active?
-                $statusField = get_option('rma_status_field_name');
-                $statusValue = get_option('rma_status_field_value');
-                $userStatus = $user[0]->$statusField;
-                if ($userStatus != $statusValue) {
-                    //user not active; return to sign-in with error msg
-                    $_SESSION['status_error'] = true;
+                if (empty($password)) {
+                    $_SESSION['pw_error'] = true;
                     wp_redirect(home_url('member-sign-in'));
                     exit;
                 }
-                
                 //check active user's password
                 if (password_verify($password, $hash)) {
-                    setcookie('rma_member', 'active', time() + 3600, COOKIEPATH, COOKIE_DOMAIN);
-                    //remove all sign in data
-                    session_destroy();
-                    wp_redirect(home_url('member-content'));
-                    exit;
+                    //is user active?
+                    $statusField = get_option('rma_status_field_name');
+                    $statusValue = get_option('rma_status_field_value');
+                    $userStatus = $user[0]->$statusField;
+                    if ($userStatus != $statusValue) {
+                        //user not active; return to sign-in with error msg
+                        $_SESSION['status_error'] = true;
+                        wp_redirect(home_url('member-sign-in'));
+                        exit;
+                    } else {
+                        setcookie('rma_member', 'active', 0, COOKIEPATH, COOKIE_DOMAIN);
+                        //remove all sign in data
+                        session_destroy();
+                        wp_redirect(home_url('member-content'));
+                        exit;
+                    }
                 }
             }
             $_SESSION['rma_member_form_error'] = true;
         }
     }
-    
+
     /**
      * Get RESTful API's response
      * 
@@ -99,7 +103,7 @@ class Tools
                 );
                 break;
             default:
-                
+
                 break;
         }
         $getURI = $uri . '/' . $email;
