@@ -88,15 +88,46 @@ function rma_init() {
         }
         return new SettingsPage($plugin['properties']);
     };
+    // Information needed for creating the plugin's pages
+    $page_definitions = array(
+        'member-sign-in' => array(
+            'title' => __('Member sign in', 'rma-member-auth'),
+            'content' => '[member_sign_in]',
+            'class' => 'Rma\Pages\Pages',
+            'function' => 'createSignInForm'
+        ),
+//        'member-account' => array(
+//            'title' => __('Your Account', 'personalize-login'),
+//            'content' => '[account-info]'
+//        ),
+        'member-register' => array(
+            'title' => __('Register', 'rma-member-auth'),
+            'content' => '[custom_register_form]', 
+            'class' => 'Rma\Pages\Pages',
+            'function' => 'createRegisterForm'
+        ),
+//        'member-password-lost' => array(
+//            'title' => __('Forgot Your Password?', 'personalize-login'),
+//            'content' => '[custom-password-lost-form]'
+//        ),
+//        'member-password-reset' => array(
+//            'title' => __('Pick a New Password', 'personalize-login'),
+//            'content' => '[custom-password-reset-form]'
+//        )
+    );
+
+
     $templates = [
         './Templates/member-content.php' => 'Restricted Member Content',
     ];
     //initialization functions
     $templater = new Rma\PageTemplater($templates);
+    $pages = new Rma\Pages\PageLoader();
+    $pages->pageCreator($page_definitions);
     add_action('init', ['Rma\Tools', 'validate_sign_in']);
-    add_action( 'admin_enqueue_scripts', 'rmaQueueScripts' );
+    add_action('admin_enqueue_scripts', 'rmaQueueScripts');
     add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
-    add_shortcode('member_sign_in', ['Rma\Shortcodes\SigninForm', 'createSignInForm']);
+    add_shortcode('member_sign_in', ['Rma\Pages\Pages', 'createSignInForm']);
     $plugin->run();
 }
 

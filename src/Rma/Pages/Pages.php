@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Rma\Shortcodes;
+namespace Rma\Pages;
 
 /**
  * Description of SigninForm
  *
  * @author George
  */
-class SigninForm
+class Pages
 {
 
     public static function createSignInForm() {
@@ -105,4 +105,13 @@ class SigninForm
         return $form;
     }
 
+    public static function createRegisterForm() {
+        return (new self)->registerForm();
+    }
+    
+    public function registerForm() {
+        $form = '<div><h3>Greetings, Planet Earth!</h3></div>';
+        
+        return $form;
+    }
 }
