@@ -32,8 +32,10 @@ if (!defined('WPINC')) {
     die;
 }
 
+use Rma\Pages\PageLoader;
+use Rma\Pages\SettingsPage;
 use Rma\Plugin;
-use Rma\SettingsPage;
+use Rma\Templates\PageTemplater;
 
 spl_autoload_register('rma_autoloader');
 
@@ -117,17 +119,17 @@ function rma_init() {
 //        )
     );
 
-
+    //template MUST be in Templates folder; use ./ for template path
     $templates = [
-        './Templates/member-content.php' => 'Restricted Member Content',
+        './member-content.php' => 'Restricted Member Content',
     ];
     //initialization functions
-    $templater = new Rma\PageTemplater($templates);
-    $pages = new Rma\Pages\PageLoader();
+    $templater = new PageTemplater($templates);
+    $pages = new PageLoader();
     $pages->pageCreator($page_definitions);
     $pages->shortcodeGenerator($page_definitions);
     add_action('admin_enqueue_scripts', 'rmaQueueScripts');
-    add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
+    add_action('plugins_loaded', array('Rma\Templates\PageTemplater', 'get_instance'));
 
     $plugin->run();
 }

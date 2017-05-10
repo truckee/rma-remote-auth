@@ -1,7 +1,7 @@
 <?php
-//src\Rma\PageTemplater.php
+//src\Rma\Templates\PageTemplater.php
 
-namespace Rma;
+namespace Rma\Templates;
 
 /**
  * PageTemplater
