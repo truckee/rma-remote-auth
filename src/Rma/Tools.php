@@ -27,48 +27,48 @@ class Tools
         $validEmail = filter_input(INPUT_POST, '_email', FILTER_VALIDATE_EMAIL);
         //do check only when a email value present
         if (null !== $validEmail) {
-            //assign $email to value in form
-            $email = filter_input(INPUT_POST, '_email');
             //save address to reproduce in failed form
-            $_SESSION['_email_address'] = $email;
+            $validSignIn['_email_address'] = $validEmail;
             if (false === $validEmail) {
                 //set error value to true
-                $_SESSION['_email_error'] = true;
+                $validSignIn['_email_error'] = true;
             }
 
-            $data = $this->getData($email);
+            //get data for valid email
+            $data = $this->getData($validEmail);
             if (null !== $data && '200' == $data['response']['code']) {
                 //if good data returned
                 $user = json_decode($data['body']);
+                $validSignIn['found'] = true;
+                
+                //is user active?
+                $statusField = get_option('rma_status_field_name');
+                $statusValue = get_option('rma_status_field_value');
+                $userStatus = $user[0]->$statusField;
+                $validSignIn['active'] = ($userStatus == $statusValue) ? true : false;
+
+                //may user register?
                 $hash = $user[0]->password;
+                $validSignIn['register'] = (null === $hash && $validSignIn['active']) ? true : false;
+
+                //was password entered
                 $password = filter_input(INPUT_POST, '_password');
-                if (empty($password)) {
-                    $_SESSION['pw_error'] = true;
-                    wp_redirect(home_url('member-sign-in'));
-                    exit;
-                }
+                $validSignIn['pw_error'] = (empty($password)) ? true : null;
+
                 //check active user's password
-                if (password_verify($password, $hash)) {
-                    //is user active?
-                    $statusField = get_option('rma_status_field_name');
-                    $statusValue = get_option('rma_status_field_value');
-                    $userStatus = $user[0]->$statusField;
-                    if ($userStatus != $statusValue) {
-                        //user not active; return to sign-in with error msg
-                        $_SESSION['status_error'] = true;
-                        wp_redirect(home_url('member-sign-in'));
-                        exit;
-                    } else {
-                        setcookie('rma_member', 'active', 0, COOKIEPATH, COOKIE_DOMAIN);
-                        //remove all sign in data
-                        session_destroy();
-                        wp_redirect(home_url('member-content'));
-                        exit;
-                    }
+                $passwordVerified = password_verify($password, $hash);
+                //if verified, show content link
+                if ($passwordVerified && $validSignIn['active']) {
+                    $_SESSION['rma_member_active'] = true;
+                    $validSignIn['validated'] = true;
                 }
+                
+                return $validSignIn;;
             }
-            $_SESSION['rma_member_form_error'] = true;
+            $validSignIn['rma_member_form_error'] = true;
         }
+
+        return $validSignIn;
     }
 
     /**
@@ -94,7 +94,7 @@ class Tools
                 );
                 break;
             case 'HTTP Basic':
-                $username = get_option('rma_auth_type_basic_username');
+                $ee = get_option('rma_auth_type_basic_username');
                 $password = get_option('rma_auth_type_basic_password');
                 $args = array(
                     'headers' => array(

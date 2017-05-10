@@ -45,7 +45,8 @@ function rma_autoloader($class_name) {
     }
 }
 
-add_action('plugins_loaded', 'rma_init'); // Hook initialization function
+add_action('init', 'rma_init'); // Hook initialization function
+//add_action('plugins_loaded', 'rma_init'); // Hook initialization function
 
 function rma_init() {
     $plugin = new Plugin(); // Create container
@@ -93,7 +94,7 @@ function rma_init() {
         'member-sign-in' => array(
             'title' => __('Member sign in', 'rma-member-auth'),
             'content' => '[member_sign_in]',
-            'class' => 'Rma\Pages\Pages',
+            'class' => 'Rma\Pages\SignIn',
             'function' => 'createSignInForm'
         ),
 //        'member-account' => array(
@@ -124,10 +125,10 @@ function rma_init() {
     $templater = new Rma\PageTemplater($templates);
     $pages = new Rma\Pages\PageLoader();
     $pages->pageCreator($page_definitions);
-    add_action('init', ['Rma\Tools', 'validate_sign_in']);
+    $pages->shortcodeGenerator($page_definitions);
     add_action('admin_enqueue_scripts', 'rmaQueueScripts');
     add_action('plugins_loaded', array('Rma\PageTemplater', 'get_instance'));
-    add_shortcode('member_sign_in', ['Rma\Pages\Pages', 'createSignInForm']);
+
     $plugin->run();
 }
 
