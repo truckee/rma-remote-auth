@@ -1,8 +1,8 @@
 <?php
 /* Template Name: Member Content Template */
 
-//Check if rma_member cookie is set
-if (isset($_COOKIE['rma_member'])) {
+//Check if rma_member_active is set
+if (isset($_SESSION['rma_member_active'])) {
     get_header();
     ?>
     <div class="primary-content col-md-7 col-md-push-2">
@@ -22,6 +22,7 @@ if (isset($_COOKIE['rma_member'])) {
     get_footer();
 }
 else {
+    $_SESSION['memberContentURI'] = get_permalink();
     wp_redirect(home_url('member-sign-in'));
     exit;
 }
