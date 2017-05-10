@@ -1,6 +1,8 @@
 <?php
 
-namespace Rma;
+namespace Rma\Pages;
+
+use Rma\Pages\WpSubPage;
 
 class SettingsPage extends WpSubPage
 {

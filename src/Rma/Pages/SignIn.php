@@ -2,6 +2,8 @@
 
 namespace Rma\Pages;
 
+use Rma\Validation\SignInValidation;
+
 /**
  * Description of SignIn
  *
@@ -21,12 +23,14 @@ class SignIn
         define('NOT_FOUND', 'Member credentials not found');
         define('NOT_ACTIVE', 'Member not considered active');
         define('PW_ERROR', 'Password not entered');
+        define('API_ERROR', 'API entries missing');
+        define('BASIC_ERROR', 'HTTP Basic entries missing');
 
         $validSignIn = [];
         if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
             $signInData = filter_input_array(INPUT_POST);
-            $tools = new \Rma\Tools();
-            $validSignIn = $tools->validate_sign_in($signInData);
+            $validator = new SignInValidation();
+            $validSignIn = $validator->validate_sign_in($signInData);
         }
 
         $formHeader = '<div class="panel panel-info">
@@ -46,6 +50,25 @@ class SignIn
 
             return $form;
         }
+        
+        $authType = get_option('rma_auth_type');
+        
+        if ('API key' ===  $authType && (empty(get_option('rma_auth_type_api_key')) || empty(get_option('rma_auth_type_api_key_field_name')))) {
+            $form .= $formDanger;
+            $form .= API_ERROR;
+            $form .= $formFooter;
+
+            return $form;
+        }
+        
+        if ('HTTP Basic' ===  $authType && (empty(get_option('rma_auth_type_basic_username')) || empty(get_option('rma_auth_type_basic_password')))) {
+            $form .= $formDanger;
+            $form .= BASIC_ERROR;
+            $form .= $formFooter;
+
+            return $form;
+        }
+            
         
         //if validated member show link to content
         if (isset($validSignIn['validated'])) {

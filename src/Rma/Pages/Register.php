@@ -1,19 +1,13 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Rma\Pages;
 
 /**
- * Description of SigninForm
+ * Description of Register
  *
  * @author George
  */
-class Pages
+class Register
 {
 
     public static function createRegisterForm() {
