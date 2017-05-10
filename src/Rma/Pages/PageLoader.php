@@ -33,10 +33,15 @@ class PageLoader
                             'comment_status' => 'closed',
                         )
                 );
-                $code = str_replace(['[', ']'], '', $page['content']);
-                if (!shortcode_exists($code)) {
-                    add_shortcode($code, [$page['class'], $page['function']]);
-                }
+            }
+        }
+    }
+
+    public function shortcodeGenerator($page_definitions) {
+        foreach ($page_definitions as $slug => $page) {
+            $code = str_replace(['[', ']'], '', $page['content']);
+            if (!shortcode_exists($code)) {
+                add_shortcode($code, [$page['class'], $page['function']]);
             }
         }
     }
