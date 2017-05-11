@@ -106,7 +106,7 @@ function rma_init() {
         'member-register' => array(
             'title' => __('Register', 'rma-member-auth'),
             'content' => '[custom_register_form]', 
-            'class' => 'Rma\Pages\Pages',
+            'class' => 'Rma\Pages\Register',
             'function' => 'createRegisterForm'
         ),
 //        'member-password-lost' => array(
