@@ -121,7 +121,7 @@ function rma_init() {
 
     //template MUST be in Templates folder; use ./ for template path
     $templates = [
-        './member-content.php' => 'Restricted Member Content',
+        './member-content-template.php' => 'Restricted Member Content',
     ];
     //initialization functions
     $templater = new PageTemplater($templates);
