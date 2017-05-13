@@ -23,6 +23,32 @@ class SettingValidation
         return $uri;
     }
 
+    //validate Set user password URI
+    static function validate_rma_user_password_uri() {
+        $uri = filter_input(INPUT_POST, 'rma_user_password_uri');
+        $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
+        if ($uri !== $uriFiltered) {
+            $invalid = $uri . ' is an invalid URI';
+            $empty = 'Set password URI may not be empty';
+            add_settings_error('rma_user_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
+        }
+
+        return $uri;
+    }
+
+    //validate Set user password URI
+    static function validate_rma_forgot_password_uri() {
+        $uri = filter_input(INPUT_POST, 'rma_forgot_password_uri');
+        $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
+        if ($uri !== $uriFiltered) {
+            $invalid = $uri . ' is an invalid URI';
+            $empty = 'Forgot password URI may not be empty';
+            add_settings_error('rma_forgot_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
+        }
+
+        return $uri;
+    }
+
     //validate Sstatus field name
     static function validate_rma_status_field_name() {
         $fieldName = filter_input(INPUT_POST, 'rma_status_field_name');

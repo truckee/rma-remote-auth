@@ -17,6 +17,16 @@ class SettingFields
                 $value = get_option($name);
                 echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
                 break;
+            case 'rma_user_password_uri':
+                $name = $field['fieldName'];
+                $value = get_option($name);
+                echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
+                break;
+            case 'rma_forgot_password_uri':
+                $name = $field['fieldName'];
+                $value = get_option($name);
+                echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
+                break;
             case 'rma_status_field_name':
                 $name = $field['fieldName'];
                 $value = get_option($name);

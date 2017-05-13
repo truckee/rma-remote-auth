@@ -53,4 +53,23 @@ class Tools
         return $data;
     }
 
+    /**
+     * Send register email
+     */
+    public function sendRegistrationData($email) {
+        $args = [
+            'method' => 'POST',
+            'timeout' => 45,
+            'redirection' => 5,
+            'httpversion' => '1.0',
+            'blocking' => true,
+            'headers' => array(),
+            'body' =>
+            ['email' => $email,
+            ]
+        ];
+        $uri = get_option('rma_user_data_uri');
+        $sent = wp_remote_post($uri, $args);
+    }
+
 }

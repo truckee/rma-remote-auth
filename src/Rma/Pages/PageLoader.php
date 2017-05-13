@@ -15,7 +15,11 @@ namespace Rma\Pages;
  */
 class PageLoader
 {
-
+    /**
+     * Create pages per definitions
+     * 
+     * @param array $page_definitions
+     */
     public function pageCreator($page_definitions) {
         foreach ($page_definitions as $slug => $page) {
             // Check that the page doesn't exist already
@@ -37,6 +41,11 @@ class PageLoader
         }
     }
 
+    /**
+     * Create shortcodes from page definitions
+     * 
+     * @param type $page_definitions
+     */
     public function shortcodeGenerator($page_definitions) {
         foreach ($page_definitions as $slug => $page) {
             $code = str_replace(['[', ']'], '', $page['content']);
@@ -44,6 +53,18 @@ class PageLoader
                 add_shortcode($code, [$page['class'], $page['function']]);
             }
         }
+    }
+
+    /**
+     * Update meta values for given page/post id
+     * 
+     * @param integer $id
+     * @param string $meta_key
+     * @param string $meta_value
+     * @return mixed
+     */
+    public function updatePostMeta($id, $meta_key, $meta_value) {
+        return update_post_meta($id, $meta_key, $meta_value);
     }
 
 }

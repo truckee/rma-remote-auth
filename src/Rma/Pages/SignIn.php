@@ -36,7 +36,7 @@ class SignIn
         $formHeader = '<div class="panel panel-info">
     <div class="panel-heading">Member sign-in</div>
     <div class="panel-body">';
-        $formDanger = '<div class="row"><div class="col-md-7 text-danger">';
+        $formDanger = '<div class="row"><div class="col-sm-7 text-danger">';
         $formFooter = str_repeat('</div>', 4);
         
         $form = $formHeader;
@@ -51,30 +51,11 @@ class SignIn
             return $form;
         }
         
-        $authType = get_option('rma_auth_type');
-        
-        if ('API key' ===  $authType && (empty(get_option('rma_auth_type_api_key')) || empty(get_option('rma_auth_type_api_key_field_name')))) {
-            $form .= $formDanger;
-            $form .= API_ERROR;
-            $form .= $formFooter;
-
-            return $form;
-        }
-        
-        if ('HTTP Basic' ===  $authType && (empty(get_option('rma_auth_type_basic_username')) || empty(get_option('rma_auth_type_basic_password')))) {
-            $form .= $formDanger;
-            $form .= BASIC_ERROR;
-            $form .= $formFooter;
-
-            return $form;
-        }
-            
-        
         //if validated member show link to content
         if (isset($validSignIn['validated'])) {
             $pageId = url_to_postid($_SESSION['memberContentURI']);
             $title = get_the_title($pageId);
-            $form .= '<div class="row"><div class="col-md-7"> '
+            $form .= '<div class="row"><div class="col-sm-7"> '
                     . '<button><a href="' . $_SESSION['memberContentURI'] . '">Go to ' . $title . '</a></button>';
             $form .= $formFooter;
             
@@ -84,7 +65,9 @@ class SignIn
         //if member exists without password, allow to register
         if (isset($validSignIn['register']) && $validSignIn['register']) {
             $registerPath = get_permalink(get_page_by_path('member-register'));
-            $form .= '<div class="row"><div class="col-md-10"> '
+            $_SESSION['rma_email'] = $validSignIn['_email_address'];
+            $_SESSION['rma_member_active'] = true;
+            $form .= '<div class="row"><div class="col-sm-10"> '
                     . '<button><a href="' . $registerPath . '">Click here to register for content access</a></button>';
             $form .= $formFooter;
             
@@ -109,35 +92,41 @@ class SignIn
         //was an invalid email entered?
         $mailError = '';
         if (isset($validSignIn['_email_error'])) {
-            $mailError = '</div><div class="row"><div class="col-md-7 text-danger">' . INVALID_EMAIL . '</div>';
+            $mailError = '</div><div class="row"><div class="col-sm-7 text-danger">' . INVALID_EMAIL . '</div>';
         }
         $pwError = '';
         if (isset($validSignIn['pw_error'])) {
-            $pwError = '</div><div class="row"><div class="col-md-7 text-danger">' . PW_ERROR . '</div>';
+            $pwError = '</div><div class="row"><div class="col-sm-7 text-danger">' . PW_ERROR . '</div>';
         }
         //were credentials not found?
         $formError = '';
         if (isset($validSignIn['rma_member_form_error'])) {
-            $formError = '<br><div class="row"><div class="col-md-7 text-danger">' . NOT_FOUND . '</div></div>';
+            $formError = '<br><div class="row"><div class="col-sm-7 text-danger">' . NOT_FOUND . '</div></div>';
         }
 
         $form = $formHeader . '<form action=""  method="post">
             <input  type="hidden" name="action" value="member_sign_in">
             <div class="row">
-                <div class="col-md-4">Email address</div>
+                <div class="col-sm-12">
+                <p>Active members without passwords may register for content by
+                signing in without a password.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">Email address</div>
             ';
-        $form .= '<div class="col-md-3"><input type="text" name="_email" value="' . $email . '"/></div>' .
+        $form .= '<div class="col-sm-3"><input type="text" name="_email" value="' . $email . '"/></div>' .
                 $mailError;
         $form .= '</div>
             <br />
             <div class="row">
-                <div class="col-md-4">Password</div>
-                <div class="col-md-3"><input type="password" name="_password" /></div>' .
+                <div class="col-sm-4">Password</div>
+                <div class="col-sm-3"><input type="password" name="_password" /></div>' .
             $pwError;
         $form .= '</div>
             <br>
             <div class="row">
-                <div class="col-md-4"><input type="submit" value="Sign in" /></div>
+                <div class="col-sm-4"><input type="submit" value="Sign in" /></div>
             </div>
             </form>';
         $form .= $formError . '</div></div>';

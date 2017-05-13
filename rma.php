@@ -68,7 +68,11 @@ function rma_init() {
             ['fieldName' => 'rma_auth_type',
                 'label' => 'Authentication type'],
             ['fieldName' => 'rma_user_data_uri',
-                'label' => 'User data URI',],
+                'label' => 'Get user data URI',],
+            ['fieldName' => 'rma_user_password_uri',
+                'label' => 'Set user password URI',],
+            ['fieldName' => 'rma_forgot_password_uri',
+                'label' => 'Forgot password URI',],
             ['fieldName' => 'rma_status_field_name',
                 'label' => 'Status field name'],
             ['fieldName' => 'rma_status_field_value',
@@ -97,7 +101,7 @@ function rma_init() {
             'title' => __('Member sign in', 'rma-member-auth'),
             'content' => '[member_sign_in]',
             'class' => 'Rma\Pages\SignIn',
-            'function' => 'createSignInForm'
+            'function' => 'createSignInForm',
         ),
 //        'member-account' => array(
 //            'title' => __('Your Account', 'personalize-login'),
@@ -105,9 +109,9 @@ function rma_init() {
 //        ),
         'member-register' => array(
             'title' => __('Register', 'rma-member-auth'),
-            'content' => '[custom_register_form]', 
+            'content' => '[custom_register_form]',
             'class' => 'Rma\Pages\Register',
-            'function' => 'createRegisterForm'
+            'function' => 'createRegisterForm',
         ),
 //        'member-password-lost' => array(
 //            'title' => __('Forgot Your Password?', 'personalize-login'),
@@ -124,12 +128,19 @@ function rma_init() {
         './member-content-template.php' => 'Restricted Member Content',
     ];
     //initialization functions
+    //add tempate(s)
     $templater = new PageTemplater($templates);
+    //add page(s) & shortcodes
     $pages = new PageLoader();
     $pages->pageCreator($page_definitions);
     $pages->shortcodeGenerator($page_definitions);
+    //add scripts
     add_action('admin_enqueue_scripts', 'rmaQueueScripts');
-    add_action('plugins_loaded', array('Rma\Templates\PageTemplater', 'get_instance'));
+    //add template to Register page
+    $id = get_page_by_title('Register')->ID;
+    $meta_key = '_wp_page_template';
+    $meta_value = './member-content-template.php';
+    $pages->updatePostMeta($id, $meta_key, $meta_value);
 
     $plugin->run();
 }
