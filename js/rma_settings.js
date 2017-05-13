@@ -1,14 +1,17 @@
 jQuery(document).ready(function ($) {
     // $() will work as an alias for jQuery() inside of this function
-    authType = $("input:radio[name='rma_auth_type']");
-    api = $("input:radio[name='rma_auth_type'][value='API key']");
-    basic = $("input:radio[name='rma_auth_type'][value='HTTP Basic']");
-    none = $("input:radio[name='rma_auth_type'][value='None']");
-    key = $("#rma_auth_type_api_key");
-    keyName = $("#rma_auth_type_api_key_field_name");
-    username = $("#rma_auth_type_basic_username");
-    password = $("#rma_auth_type_basic_password");
-    type = $("input:radio[name=rma_auth_type]:checked").val();
+    var authType = $("input:radio[name='rma_auth_type']");
+//    var api = $("input:radio[name='rma_auth_type'][value='API key']");
+//    var basic = $("input:radio[name='rma_auth_type'][value='HTTP Basic']");
+//    var none = $("input:radio[name='rma_auth_type'][value='None']");
+    var key = $("#rma_auth_type_api_key");
+    var keyName = $("#rma_auth_type_api_key_field_name");
+    var username = $("#rma_auth_type_basic_username");
+    var password = $("#rma_auth_type_basic_password");
+    var type = $("input:radio[name=rma_auth_type]:checked").val();
+    var userValue = $("#rma_user_data_uri").val();
+    var passwordValue = $("#rma_user_password_uri").val();
+    var forgotValue = $("#rma_forgot_password_uri").val();
     
     //set initial display
     if (type === 'API key') {
@@ -22,6 +25,9 @@ jQuery(document).ready(function ($) {
     //change display as required
     $(authType).change(function () {
         $("input:text[name='rma_user_data_uri']").val('');
+        $("input:text[name='rma_user_password_uri']").val('');
+        $("input:text[name='rma_forgot_password_uri']").val('');
+        resetValues();
         if (this.value === 'API key') {
             showKey(key, keyName, username, password);
     } else if (this.value === 'HTTP Basic') {
@@ -62,5 +68,13 @@ jQuery(document).ready(function ($) {
         username.parents("tr").hide();
         password.hide();
         password.parents("tr").hide();
+    }
+    
+    function resetValues() {
+        if (type === $("input:radio[name=rma_auth_type]:checked").val()) {
+            $("#rma_user_data_uri").val(userValue);
+            $("#rma_user_password_uri").val(passwordValue);
+            $("#rma_forgot_password_uri").val(forgotValue);
+        }
     }
 });
