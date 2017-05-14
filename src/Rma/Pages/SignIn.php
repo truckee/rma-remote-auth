@@ -68,8 +68,6 @@ class SignIn
             $registerPath = get_permalink(get_page_by_path('member-register'));
             $_SESSION['rma_email'] = $validSignIn['_email_address'];
             $_SESSION['rma_member_active'] = true;
-            wp_redirect('member-register');
-            exit;
             $form .= '<div class="row"><div class="col-sm-10"> '
                     . '<a href="' . $registerPath . '">Click here to register for content access</a>';
             $form .= $formFooter;
