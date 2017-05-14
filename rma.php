@@ -36,6 +36,7 @@ use Rma\Pages\PageLoader;
 use Rma\Pages\SettingsPage;
 use Rma\Plugin;
 use Rma\Templates\PageTemplater;
+use Rma\Utility\Deactivation;
 
 spl_autoload_register('rma_autoloader');
 
@@ -96,7 +97,8 @@ function rma_init() {
         return new SettingsPage($plugin['properties']);
     };
     // Information needed for creating the plugin's pages
-    $page_definitions = array(
+    global $pageDefinitions;
+    $pageDefinitions = array(
         'member-sign-in' => array(
             'title' => __('Member sign in', 'rma-member-auth'),
             'content' => '[member_sign_in]',
@@ -124,22 +126,24 @@ function rma_init() {
     );
 
     //template MUST be in Templates folder; use ./ for template path
-    $templates = [
+    global $rmaTemplates;
+    $rmaTemplates = [
         './member-content-template.php' => 'Restricted Member Content',
+        './rma-registration-template.php' => 'RMA Registration',
     ];
     //initialization functions
     //add tempate(s)
-    $templater = new PageTemplater($templates);
+    $templater = new PageTemplater($rmaTemplates);
     //add page(s) & shortcodes
     $pages = new PageLoader();
-    $pages->pageCreator($page_definitions);
-    $pages->shortcodeGenerator($page_definitions);
+    $pages->pageCreator($pageDefinitions);
+    $pages->shortcodeGenerator($pageDefinitions);
     //add scripts
     add_action('admin_enqueue_scripts', 'rmaQueueScripts');
     //add template to Register page
     $id = get_page_by_title('Register')->ID;
     $meta_key = '_wp_page_template';
-    $meta_value = './member-content-template.php';
+    $meta_value = './rma-registration-template.php';
     $pages->updatePostMeta($id, $meta_key, $meta_value);
 
     $plugin->run();
@@ -151,4 +155,13 @@ function rmaQueueScripts($hook) {
         return;
     }
     wp_enqueue_script('rma_js_script', plugins_url('/js/rma_settings.js', __FILE__), ['jquery']);
+}
+
+register_deactivation_hook( __FILE__, 'rmaDeactivate' );
+
+function rmaDeactivate() {
+    global $pageDefinitions;
+    $deactivate = new Deactivation();
+    $deactivate->removePages($pageDefinitions);
+    $deactivate->removeShortcodes($pageDefinitions);
 }
