@@ -56,7 +56,8 @@ class SignIn
             $pageId = url_to_postid($_SESSION['memberContentURI']);
             $title = get_the_title($pageId);
             $form .= '<div class="row"><div class="col-sm-7"> '
-                    . '<button><a href="' . $_SESSION['memberContentURI'] . '">Go to ' . $title . '</a></button>';
+                    . '<a href="' . $_SESSION['memberContentURI'] . '">Go to ' . $title . '</a>';
+            unset($_SESSION['memberContentURI']);
             $form .= $formFooter;
             
             return $form;
@@ -67,8 +68,10 @@ class SignIn
             $registerPath = get_permalink(get_page_by_path('member-register'));
             $_SESSION['rma_email'] = $validSignIn['_email_address'];
             $_SESSION['rma_member_active'] = true;
+            wp_redirect('member-register');
+            exit;
             $form .= '<div class="row"><div class="col-sm-10"> '
-                    . '<button><a href="' . $registerPath . '">Click here to register for content access</a></button>';
+                    . '<a href="' . $registerPath . '">Click here to register for content access</a>';
             $form .= $formFooter;
             
             return $form;

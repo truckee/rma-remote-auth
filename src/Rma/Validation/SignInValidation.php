@@ -2,7 +2,7 @@
 
 namespace Rma\Validation;
 
-use Rma\Tools;
+use Rma\Utility\RESTData;
 
 /**
  * Description of SignInValidation
@@ -37,26 +37,31 @@ class SignInValidation
             }
 
             //get data for valid email
-            $tools = new Tools();
+            $uri = get_option('rma_user_data_uri');
+            $tools = new RESTData($uri);
             $data = $tools->getData($validEmail);
             if (null !== $data && '200' == $data['response']['code']) {
                 //if good data returned
                 $user = json_decode($data['body']);
                 $validSignIn['found'] = true;
-                
+
                 //is user active?
                 $statusField = get_option('rma_status_field_name');
                 $statusValue = get_option('rma_status_field_value');
                 $userStatus = $user[0]->$statusField;
                 $validSignIn['active'] = ($userStatus == $statusValue) ? true : false;
 
-                //may user register?
-                $hash = $user[0]->password;
-                $validSignIn['register'] = (null === $hash && $validSignIn['active']) ? true : false;
-
                 //was password entered
                 $password = filter_input(INPUT_POST, '_password');
                 $validSignIn['pw_error'] = (empty($password)) ? true : null;
+
+                //may user register?
+                $hash = $user[0]->password;
+                $validSignIn['register'] = ('' === $hash && $validSignIn['active'] && $validSignIn['pw_error']) ? true : false;
+                if ($validSignIn['register']) {
+
+                    return $validSignIn;
+                }
 
                 //check active user's password
                 $passwordVerified = password_verify($password, $hash);
@@ -64,13 +69,14 @@ class SignInValidation
                 if ($passwordVerified && $validSignIn['active']) {
                     $_SESSION['rma_member_active'] = true;
                     $validSignIn['validated'] = true;
+
+                    return $validSignIn;
                 }
-                
-                return $validSignIn;;
             }
             $validSignIn['rma_member_form_error'] = true;
         }
 
         return $validSignIn;
     }
+
 }

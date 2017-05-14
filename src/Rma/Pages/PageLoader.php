@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Rma\Pages;
 
 /**
@@ -18,10 +12,10 @@ class PageLoader
     /**
      * Create pages per definitions
      * 
-     * @param array $page_definitions
+     * @param array $pageDefinitions
      */
-    public function pageCreator($page_definitions) {
-        foreach ($page_definitions as $slug => $page) {
+    public function pageCreator($pageDefinitions) {
+        foreach ($pageDefinitions as $slug => $page) {
             // Check that the page doesn't exist already
             $query = new \WP_Query('pagename=' . $slug);
             if (!$query->have_posts()) {
@@ -44,10 +38,10 @@ class PageLoader
     /**
      * Create shortcodes from page definitions
      * 
-     * @param type $page_definitions
+     * @param type $pageDefinitions
      */
-    public function shortcodeGenerator($page_definitions) {
-        foreach ($page_definitions as $slug => $page) {
+    public function shortcodeGenerator($pageDefinitions) {
+        foreach ($pageDefinitions as $slug => $page) {
             $code = str_replace(['[', ']'], '', $page['content']);
             if (!shortcode_exists($code)) {
                 add_shortcode($code, [$page['class'], $page['function']]);
