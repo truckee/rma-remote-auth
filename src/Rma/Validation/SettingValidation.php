@@ -37,13 +37,13 @@ class SettingValidation
     }
 
     //validate Set user password URI
-    static function validate_rma_forgot_password_uri() {
-        $uri = filter_input(INPUT_POST, 'rma_forgot_password_uri');
+    static function validate_rma_reset_password_uri() {
+        $uri = filter_input(INPUT_POST, 'rma_reset_password_uri');
         $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
         if ($uri !== $uriFiltered) {
             $invalid = $uri . ' is an invalid URI';
             $empty = 'Forgot password URI may not be empty';
-            add_settings_error('rma_forgot_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
+            add_settings_error('rma_reset_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
         }
 
         return $uri;

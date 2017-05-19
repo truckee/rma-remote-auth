@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
     var type = $("input:radio[name=rma_auth_type]:checked").val();
     var userValue = $("#rma_user_data_uri").val();
     var passwordValue = $("#rma_user_password_uri").val();
-    var forgotValue = $("#rma_forgot_password_uri").val();
+    var resetValue = $("#rma_reset_password_uri").val();
     
     //set initial display
     if (type === 'API key') {
@@ -26,7 +26,7 @@ jQuery(document).ready(function ($) {
     $(authType).change(function () {
         $("input:text[name='rma_user_data_uri']").val('');
         $("input:text[name='rma_user_password_uri']").val('');
-        $("input:text[name='rma_forgot_password_uri']").val('');
+        $("input:text[name='rma_reset_password_uri']").val('');
         resetValues();
         if (this.value === 'API key') {
             showKey(key, keyName, username, password);
@@ -74,7 +74,7 @@ jQuery(document).ready(function ($) {
         if (type === $("input:radio[name=rma_auth_type]:checked").val()) {
             $("#rma_user_data_uri").val(userValue);
             $("#rma_user_password_uri").val(passwordValue);
-            $("#rma_forgot_password_uri").val(forgotValue);
+            $("#rma_reset_password_uri").val(resetValue);
         }
     }
 });

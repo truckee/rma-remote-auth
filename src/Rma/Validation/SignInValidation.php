@@ -20,11 +20,11 @@ class SignInValidation
      * user is given access to protected content
      *
      */
-    static function validate_sign_in() {
+    static public function validateSignInForm() {
         return (new self)->validateSignIn();
     }
 
-    public function validateSignIn() {
+    private function validateSignIn() {
         //$validEmail: null if not set, false if validation fails
         $validEmail = filter_input(INPUT_POST, '_email', FILTER_VALIDATE_EMAIL);
         //do check only when a email value present
@@ -37,9 +37,12 @@ class SignInValidation
             }
 
             //get data for valid email
-            $uri = get_option('rma_user_data_uri');
-            $tools = new RESTData($uri);
-            $data = $tools->getData($validEmail);
+            $rest = new RESTData();
+            if (is_wp_error($data = $rest->getData($validEmail))) {
+                $validSignIn['data_error'] = true;
+                
+                return $validSignIn;
+            }
             if (null !== $data && '200' == $data['response']['code']) {
                 //if good data returned
                 $user = json_decode($data['body']);
@@ -73,7 +76,7 @@ class SignInValidation
                     return $validSignIn;
                 }
             }
-            $validSignIn['rma_member_form_error'] = true;
+            $validSignIn['rma_member_not_found'] = true;
         }
 
         return $validSignIn;

@@ -11,18 +11,18 @@ use Rma\Utility\Mailer;
  */
 class RESTData
 {
+
     private $headers;
     private $uri;
 
-    public function __construct($uri) {
-        $this->uri = $uri;
-        
+    public function __construct() {
+        $this->uri = get_option('rma_user_data_uri');
         $key = get_option('rma_auth_type_api_key');
         $keyName = get_option('rma_auth_type_api_key_field_name');
         $user = get_option('rma_auth_type_basic_username');
         $password = get_option('rma_auth_type_basic_password');
         $type = get_option('rma_auth_type');
-        
+
         switch ($type) {
             case 'API key':
                 $this->headers = [$keyName => $key];
@@ -52,7 +52,6 @@ class RESTData
      * Send register email
      */
     public function sendRegistrationData($email) {
-
         $args = [
             'method' => 'POST',
             'timeout' => 45,
@@ -63,16 +62,36 @@ class RESTData
             'body' =>
             ['email' => $email]
         ];
-        $sent = wp_remote_post($this->uri, $args);
+        $uri = get_option('rma_user_password_uri');
+        $sent = wp_remote_post($uri, $args);
         if (null !== $sent && '200' == $sent['response']['code']) {
             $body = json_decode($sent['body']);
             $password = $body->password;
             $mailer = new Mailer();
             $wasSent = $mailer->registrantEmail($email, $password);
         }
-        
+
+        return $sent;
+    }
+    
+    /**
+     * Set member's password
+     */
+    public function sendMemberPassword($email, $hash) {
+        $args = [
+            'method' => 'POST',
+            'timeout' => 45,
+            'redirection' => 5,
+            'httpversion' => '1.0',
+            'blocking' => true,
+            'headers' => $this->headers,
+            'body' =>
+            ['email' => $email, 'hash' => $hash],
+        ];
+        $uri = get_option('rma_reset_password_uri');
+        $sent = wp_remote_post($uri, $args);
+
         return $sent;
     }
 
 }
-                

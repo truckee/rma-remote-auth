@@ -38,6 +38,17 @@ use Rma\Plugin;
 use Rma\Templates\PageTemplater;
 use Rma\Utility\Deactivation;
 
+const USER_DATA_URI_ERROR = 'Not all RMA options set';
+const INVALID_EMAIL = 'Invalid email';
+const NOT_FOUND = 'Member credentials not found';    
+const NOT_ACTIVE = 'Member not considered active';
+const PW_ERROR = 'Password not entered';
+const API_ERROR = 'API entries missing';
+const BASIC_ERROR = 'HTTP Basic entries missing';
+const DATA_ERROR = 'Member data not available';
+const RP_GET_ERROR = 'Reset validation error. Try again.';
+const PW_MATCH_ERROR = 'Passwords do not match';
+
 spl_autoload_register('rma_autoloader');
 
 function rma_autoloader($class_name) {
@@ -72,8 +83,8 @@ function rma_init() {
                 'label' => 'Get user data URI',],
             ['fieldName' => 'rma_user_password_uri',
                 'label' => 'Set user password URI',],
-            ['fieldName' => 'rma_forgot_password_uri',
-                'label' => 'Forgot password URI',],
+            ['fieldName' => 'rma_reset_password_uri',
+                'label' => 'Reset password URI',],
             ['fieldName' => 'rma_status_field_name',
                 'label' => 'Status field name'],
             ['fieldName' => 'rma_status_field_value',
@@ -99,9 +110,9 @@ function rma_init() {
     // Information needed for creating the plugin's pages
     global $pageDefinitions;
     $pageDefinitions = array(
-        'member-sign-in' => array(
+        'rma-sign-in' => array(
             'title' => __('Member sign in', 'rma-member-auth'),
-            'content' => '[member_sign_in]',
+            'content' => '[rma_sign_in]',
             'class' => 'Rma\Pages\SignIn',
             'function' => 'createSignInForm',
         ),
@@ -109,20 +120,24 @@ function rma_init() {
 //            'title' => __('Your Account', 'personalize-login'),
 //            'content' => '[account-info]'
 //        ),
-        'member-register' => array(
+        'rma-register' => array(
             'title' => __('Register', 'rma-member-auth'),
-            'content' => '[custom_register_form]',
+            'content' => '[rma_register_form]',
             'class' => 'Rma\Pages\Register',
             'function' => 'createRegisterForm',
         ),
-//        'member-password-lost' => array(
-//            'title' => __('Forgot Your Password?', 'personalize-login'),
-//            'content' => '[custom-password-lost-form]'
-//        ),
-//        'member-password-reset' => array(
-//            'title' => __('Pick a New Password', 'personalize-login'),
-//            'content' => '[custom-password-reset-form]'
-//        )
+        'rma-password-lost' => array(
+            'title' => __('Forgot Your Password?', 'rma-member-auth'),
+            'content' => '[rma-password-lost-form]',
+            'class' => 'Rma\Pages\ForgotPassword',
+            'function' => 'createForgotPasswordForm',
+        ),
+        'rma-password-reset' => array(
+            'title' => __('Create a New Password', 'rma-member-auth'),
+            'content' => '[rma-password-reset-form]',
+            'class' => 'Rma\Pages\ResetPassword',
+            'function' => 'createResetPasswordForm',
+        )
     );
 
     //template MUST be in Templates folder; use ./ for template path

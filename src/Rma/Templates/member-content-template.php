@@ -23,6 +23,6 @@ if (isset($_SESSION['rma_member_active'])) {
 }
 else {
     $_SESSION['memberContentURI'] = get_permalink();
-    wp_redirect(home_url('member-sign-in'));
+    wp_redirect(home_url('rma-sign-in'));
     exit;
 }

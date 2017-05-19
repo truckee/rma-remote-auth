@@ -19,7 +19,6 @@ class Deactivation
             $page = get_page_by_path($slug);
             $pageId = $page->ID;
             wp_delete_post($pageId);
-//            var_dump(wp_delete_post($pageId));die;
         }
     }
 
