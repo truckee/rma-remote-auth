@@ -22,26 +22,26 @@ The settings will appear under the admin's Settings menu with the name `Remote M
 	- Select authentication type: API key, HTTP Basic Auth, or None
 
 		- For API key, enter your API key and the field name of the key (e.g., _Api-key_)
-		
+
 		- for HTTP Basic, enter the username and password for a user with search and update privileges
 
 
     - Enter remote host URIs
 
-		- User data: Returns password has for a member email address.   Example: _https://www.example.com/api/get\_user_
-		
-    		The RMA plugin assumes that the member's email address is appended to the URI. The request sent will be _https://www.example.com/get\_user/someuser@yoursite.org_
+		- User data: Returns password hash for a member email address.   Example: _https://www.example.com/api/get_user_
 
-        - Set password: The RMA plugin assumes that active members without a password hash in the member database have never registered. When signing in without a password the member is directed to a link to register. Upon clicking that link a random password is created and emailed to the member. The plugin also updates the member database with a password hash. Example: _https://www.example.com/api/set\_password_
+    		The RMA plugin assumes that the member's email address is appended to the URI. The request sent will be _https://www.example.com/get_user/someuser@yoursite.org_
+
+        - Set password: The RMA plugin assumes that active members without a password hash in the member database have never registered. When signing in without a password the member is directed to a link to register. Upon clicking that link a random password is created and emailed to the member. The plugin also updates the member database with a password hash. Example: _https://www.example.com/api/set_password_
 
             For setting passwords, the member email address is sent in the request header.
 
-		- Reset password: Updates a member password hash with a hash created for a password created by the member. Example: _https://www.example.com/api/reset\_password_
+		- Reset password: Updates a member password hash with a hash created for a password created by the member. Example: _https://www.example.com/api/reset_password_
 
             For resetting passwords, the member email address and password hash are sent in the request header.
-        
+
 	- Enter remote host field names:
-	
+
 		- Active field name: A field name used by the remote host for the member's status, e.g., _enabled_ or _status_.
 
 		- Active field value: the value used to indicate active status, e.g., _true_ or _active_
@@ -54,5 +54,6 @@ The settings will appear under the admin's Settings menu with the name `Remote M
 
 ### Testing:
 
-For the technically advanced or bold there is a simple RESTful API that can be used to test your installation of this plugin.  See the github repository [truckee\wprest](https://github.com/truckee/wprest)
- 
+For the technically advanced or bold there is a simple RESTful API that can be used to test your installation of this plugin.  See the github repository [truckee\wprest](https://github.com/truckee/wprest).
+
+It is highly recommended that email testing be done within the test environment. 
