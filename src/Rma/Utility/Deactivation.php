@@ -34,4 +34,12 @@ class Deactivation
         }
     }
 
+    public function dropTable($tables)
+    {
+        global $wpdb;
+        foreach ($tables as $tableName) {
+            $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}$tableName");
+        }
+    }
+
 }

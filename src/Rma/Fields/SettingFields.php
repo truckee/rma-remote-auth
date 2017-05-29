@@ -17,7 +17,7 @@ class SettingFields
                 $value = get_option($name);
                 echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_user_password_uri':
+            case 'rma_set_password_uri':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
@@ -70,6 +70,12 @@ class SettingFields
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
+                break;
+            case 'rma_user_get_only':
+                $name = $field['fieldName'];
+                $value = get_option($name);
+                $checked = ($value == 'on') ? ' checked="checked"' : null;
+                echo "<input type='checkbox' id='$name' name='$name' $checked />";
                 break;
             default:
                 break;

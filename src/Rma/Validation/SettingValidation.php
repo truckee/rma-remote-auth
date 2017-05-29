@@ -24,26 +24,13 @@ class SettingValidation
     }
 
     //validate Set user password URI
-    static function validate_rma_user_password_uri() {
-        $uri = filter_input(INPUT_POST, 'rma_user_password_uri');
+    static function validate_rma_set_password_uri() {
+        $uri = filter_input(INPUT_POST, 'rma_set_password_uri');
         $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
         if ($uri !== $uriFiltered) {
             $invalid = $uri . ' is an invalid URI';
             $empty = 'Set password URI may not be empty';
-            add_settings_error('rma_user_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
-        }
-
-        return $uri;
-    }
-
-    //validate Set user password URI
-    static function validate_rma_reset_password_uri() {
-        $uri = filter_input(INPUT_POST, 'rma_reset_password_uri');
-        $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
-        if ($uri !== $uriFiltered) {
-            $invalid = $uri . ' is an invalid URI';
-            $empty = 'Forgot password URI may not be empty';
-            add_settings_error('rma_reset_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
+            add_settings_error('rma_set_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
         }
 
         return $uri;
@@ -110,5 +97,16 @@ class SettingValidation
         }
 
         return $password;
+    }
+
+    //validate Password
+    static function validate_rma_user_get_only() {
+        $get = filter_input(INPUT_POST, 'rma_user_get_only');
+        $type = filter_input(INPUT_POST, 'rma_auth_type');
+//        if (0 === strlen($password) && 'HTTP Basic' === $type) {
+//            add_settings_error('rma_auth_type_basic_password', 'rma_name', 'Password may not be empty');
+//        }
+
+        return $get;
     }
 }

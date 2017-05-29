@@ -77,7 +77,7 @@ class RESTData
             'body' =>
             ['email' => $email, 'hash' => $hash],
         ];
-        $uri = get_option('rma_user_password_uri');
+        $uri = get_option('rma_set_password_uri');
         $sent = wp_remote_post($uri, $args);
 
         return $sent;

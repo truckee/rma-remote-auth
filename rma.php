@@ -38,6 +38,7 @@ use Rma\Pages\SettingsPage;
 use Rma\Plugin;
 use Rma\Templates\PageTemplater;
 use Rma\Utility\Deactivation;
+use Rma\Utility\MemberTable;
 
 const USER_DATA_URI_ERROR = 'Not all RMA options set';
 const INVALID_EMAIL = 'Invalid email';
@@ -89,7 +90,9 @@ function rma_init() {
                 'label' => 'Password'],
             ['fieldName' => 'rma_user_data_uri',
                 'label' => 'Get user data URI',],
-            ['fieldName' => 'rma_user_password_uri',
+            ['fieldName' => 'rma_user_get_only',
+                'label' => 'Get user data only',],
+            ['fieldName' => 'rma_set_password_uri',
                 'label' => 'Set user password URI',],
             ['fieldName' => 'rma_status_field_name',
                 'label' => 'Status field name'],
@@ -114,10 +117,6 @@ function rma_init() {
             'class' => 'Rma\Pages\SignIn',
             'function' => 'createSignInForm',
         ),
-//        'member-account' => array(
-//            'title' => __('Your Account', 'personalize-login'),
-//            'content' => '[account-info]'
-//        ),
         'rma-register' => array(
             'title' => __('Register', 'rma-member-auth'),
             'content' => '[rma_register_form]',
@@ -158,6 +157,8 @@ function rma_init() {
     $meta_key = '_wp_page_template';
     $meta_value = './rma-registration-template.php';
     $pages->updatePostMeta($id, $meta_key, $meta_value);
+    $table = new MemberTable();
+    $table->createMemberTable();
 
     $plugin->run();
 }
@@ -177,4 +178,8 @@ function rmaDeactivate() {
     $deactivate = new Deactivation();
     $deactivate->removePages($pageDefinitions);
     $deactivate->removeShortcodes($pageDefinitions);
+    $tables = [
+        'member',
+    ];
+    $deactivate->dropTable($tables);
 }
