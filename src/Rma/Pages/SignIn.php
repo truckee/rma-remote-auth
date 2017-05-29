@@ -20,7 +20,6 @@ class SignIn
     private function signinForm() {
         $validSignIn = [];
         if (filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
-            $signInData = filter_input_array(INPUT_POST);
             $validator = new SignInValidation();
             $validSignIn = $validator->validateSignInForm();
         }
@@ -64,7 +63,7 @@ class SignIn
         }
 
         //if member exists without password, allow to register
-        if (isset($validSignIn['register']) && $validSignIn['register']) {
+        if (isset($validSignIn['register'])) {
             $registerPath = get_permalink(get_page_by_path('rma-register'));
             $_SESSION['rma_email'] = $validSignIn['_email_address'];
             $_SESSION['rma_member_active'] = true;

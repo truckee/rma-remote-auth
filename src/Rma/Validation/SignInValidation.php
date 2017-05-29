@@ -60,7 +60,7 @@ class SignInValidation
 
                 //may user register?
                 $hash = $user[0]->password;
-                $validSignIn['register'] = ('' === $hash && $validSignIn['active'] && $validSignIn['pw_error']) ? true : false;
+                $validSignIn['register'] = ($validSignIn['active'] && $validSignIn['pw_error']) ? true : false;
                 if ($validSignIn['register']) {
 
                     return $validSignIn;

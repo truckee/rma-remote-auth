@@ -24,7 +24,7 @@ class Register
         $email = $_SESSION['rma_email'];
         unset($_SESSION['rma_email']);
         $uri = get_option('rma_user_password_uri');
-        $tools = new RESTData($uri);
+        $tools = new RESTData();
         $result = $tools->sendRegistrationData($email);
         
         return $form;
