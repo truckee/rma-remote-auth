@@ -27,6 +27,7 @@
   You should have received a copy of the GNU General Public License
   along with Remote Member Authorization. If not, see {URI to Plugin License}.
  */
+
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
@@ -60,7 +61,6 @@ function rma_autoloader($class_name) {
 }
 
 add_action('init', 'rma_init'); // Hook initialization function
-//add_action('plugins_loaded', 'rma_init'); // Hook initialization function
 
 function rma_init() {
     $plugin = new Plugin(); // Create container
@@ -91,8 +91,6 @@ function rma_init() {
                 'label' => 'Get user data URI',],
             ['fieldName' => 'rma_user_password_uri',
                 'label' => 'Set user password URI',],
-            ['fieldName' => 'rma_reset_password_uri',
-                'label' => 'Reset password URI',],
             ['fieldName' => 'rma_status_field_name',
                 'label' => 'Status field name'],
             ['fieldName' => 'rma_status_field_value',

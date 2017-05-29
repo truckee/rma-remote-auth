@@ -52,32 +52,21 @@ class RESTData
      * Send register email
      */
     public function sendRegistrationData($email) {
-        $args = [
-            'method' => 'POST',
-            'timeout' => 45,
-            'redirection' => 5,
-            'httpversion' => '1.0',
-            'blocking' => true,
-            'headers' => $this->headers,
-            'body' =>
-            ['email' => $email]
-        ];
-        $uri = get_option('rma_user_password_uri');
-        $sent = wp_remote_post($uri, $args);
+        $pw = $this->createPasswordHash();
+        $sent = $this->setMemberPassword($email, $pw['hash']);
         if (null !== $sent && '200' == $sent['response']['code']) {
             $body = json_decode($sent['body']);
-            $password = $body->password;
             $mailer = new Mailer();
-            $wasSent = $mailer->registrantEmail($email, $password);
+            $wasSent = $mailer->registrantEmail($email, $pw['password']);
         }
 
-        return $sent;
+        return $wasSent;
     }
     
     /**
      * Set member's password
      */
-    public function sendMemberPassword($email, $hash) {
+    public function setMemberPassword($email, $hash) {
         $args = [
             'method' => 'POST',
             'timeout' => 45,
@@ -88,10 +77,27 @@ class RESTData
             'body' =>
             ['email' => $email, 'hash' => $hash],
         ];
-        $uri = get_option('rma_reset_password_uri');
+        $uri = get_option('rma_user_password_uri');
         $sent = wp_remote_post($uri, $args);
 
         return $sent;
+    }
+
+    /**
+     * Generate member password & hash
+     *
+     * @return string
+     */
+    private function createPasswordHash()
+    {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $password = substr(str_shuffle($chars), 0, 8);
+        $hash = password_hash($password, PASSWORD_BCRYPT);
+
+        return [
+            'hash' => $hash,
+            'password' => $password,
+            ];
     }
 
 }
