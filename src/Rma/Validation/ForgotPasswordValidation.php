@@ -27,7 +27,7 @@ class ForgotPasswordValidation
                 
                 return $validForgot;
             }
-            if (null !== $data && '200' == $data['response']['code']) {
+            if (null !== $data && isset($data['member'])) {
                 $validForgot['valid'] = true;
                 $validForgot['email'] = $validEmail;
                 

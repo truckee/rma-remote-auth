@@ -48,17 +48,14 @@ class RESTData
             //do local get
             global $wpdb;
             $stmt = $wpdb->prepare(
-                    'SELECT * FROM ' . $wpdb->prefix . 'member WHERE email = %s',
-                    [$email]
-                );
+                'SELECT * FROM ' . $wpdb->prefix . 'member WHERE email = %s', $email
+            );
             if (is_wp_error($data = $wpdb->get_row($stmt))) {
                 return ['data_error' => true];
             }
             if (null !== $data) {
                 return ['member' => $data];
             }
-            
-            return $data;
         } else {
             //do remote GET
             //create complete $_GET uri based on authentication type
@@ -70,9 +67,9 @@ class RESTData
             if ('200' == $data['response']['code']) {
                 return ['member' => json_decode($data['body'])[0]];
             }
-
-            return $data;
         }
+
+        return $data;
     }
 
     /**
@@ -108,12 +105,18 @@ class RESTData
         ];
         if ('on' == get_option('rma_user_get_only')) {
             //do local save
+            global $wpdb;
+            $stmt = $wpdb->prepare(
+                'UPDATE ' . $wpdb->prefix . 'member SET password = %s '
+                . 'WHERE email = %s', $hash, $email
+            );
+            
+            return $wpdb->query($stmt);
         } else {
             //do remote POST
             $uri = get_option('rma_set_password_uri');
-            $sent = wp_remote_post($uri, $args);
 
-            return $sent;
+            return wp_remote_post($uri, $args);
         }
     }
 
