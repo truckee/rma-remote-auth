@@ -19,36 +19,34 @@ The settings will appear under the admin's Settings menu with the name `Remote M
 
 - Configure settings
 
-	- Select authentication type: API key, HTTP Basic Auth, or None
+	- **Authentication type**:
 
-		- For API key, enter your API key and the field name of the key (e.g., _Api-key_)
+		- For API key, enter your **API key** and the **API key field name** of the key (e.g., *Api-key*)
 
-		- for HTTP Basic, enter the username and password for a user with search and update privileges
+		- for HTTP Basic, enter the **Username** and **Password** for a user with search and update privileges
 
 
-    - Enter remote host URIs
+    - **Remote host URIs**:
 
-		- User data: Returns password hash for a member email address.   Example: _https://www.example.com/api/get_user_
+		- **Get user data URI**: Returns password hash for a member email address.   Example: _https://www.example.com/api/get_user_
 
     		The RMA plugin assumes that the member's email address is appended to the URI. The request sent will be _https://www.example.com/get_user/someuser@yoursite.org_
+    		
+		- **Get user data only**: Check this box if the RESTful API you're using does not provide POST privileges. When checked the plugin will create a member table in the WordPress database for maintaining user data. The member table is updated daily. 
 
-        - Set password: The RMA plugin assumes that active members without a password hash in the member database have never registered. When signing in without a password the member is directed to a link to register. Upon clicking that link a random password is created and emailed to the member. The plugin also updates the member database with a password hash. Example: _https://www.example.com/api/set_password_
+        - **Set user password URI**: This option appears only when the *Get user data only option* is not checked. The RMA plugin assumes that active members without a password hash in the member database have never registered. When signing in without a password the member is directed to a link to register. Upon clicking that link a random password is created and emailed to the member. The plugin also updates the member database with a password hash. Example: _https://www.example.com/api/set_password_
 
-            For setting passwords, the member email address is sent in the request header.
+            For setting and resetting passwords, the member email address and password hash are sent in the request header. 
 
-		- Reset password: Updates a member password hash with a hash created for a password created by the member. Example: _https://www.example.com/api/reset_password_
+	- **Remote host field names**:
 
-            For resetting passwords, the member email address and password hash are sent in the request header.
+		- **Status field name**: A field name used by the remote host for the member's status, e.g., _enabled_ or _status_.
 
-	- Enter remote host field names:
+		- **Active status value**: the value used to indicate active status, e.g., _true_ or _active_
 
-		- Active field name: A field name used by the remote host for the member's status, e.g., _enabled_ or _status_.
+- **Add restricted content**
 
-		- Active field value: the value used to indicate active status, e.g., _true_ or _active_
-
-- Add restricted content
-
-	- Set template to "Restricted member content" for each page of restricted content
+	- For each page of restricted content set its template to "Restricted member content" 
 
         When anyone not already signed in clicks on a menu item for a page of restricted content they will be directed to the member sign in form. Sign in is with an email address and a password. The form includes a link for cases of  forgotten password.
 
