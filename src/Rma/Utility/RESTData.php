@@ -16,7 +16,7 @@ class RESTData
 
     public function __construct()
     {
-        $this->uri = get_option('rma_user_data_uri');
+        $this->uri = get_option('rma_member_data_uri');
         $key = get_option('rma_auth_type_api_key');
         $keyName = get_option('rma_auth_type_api_key_field_name');
         $user = get_option('rma_auth_type_basic_username');
@@ -44,7 +44,7 @@ class RESTData
     {
         $data = [];
 
-        if ('on' == get_option('rma_user_get_only')) {
+        if ('on' == get_option('rma_member_get_only')) {
             //do local get
             global $wpdb;
             $stmt = $wpdb->prepare(
@@ -103,7 +103,7 @@ class RESTData
             'body' =>
             ['email' => $email, 'hash' => $hash],
         ];
-        if ('on' == get_option('rma_user_get_only')) {
+        if ('on' == get_option('rma_member_get_only')) {
             //do local save
             global $wpdb;
             $stmt = $wpdb->prepare(

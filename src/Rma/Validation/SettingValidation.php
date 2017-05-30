@@ -11,13 +11,13 @@ class SettingValidation
 {
 
     //validate User data URI
-    static function validate_rma_user_data_uri() {
-        $uri = filter_input(INPUT_POST, 'rma_user_data_uri');
+    static function validate_rma_member_data_uri() {
+        $uri = filter_input(INPUT_POST, 'rma_member_data_uri');
         $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
         if ($uri !== $uriFiltered) {
             $invalid = $uri . ' is an invalid User data URI';
             $empty = 'User data URI may not be empty';
-            add_settings_error('rma_user_data_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
+            add_settings_error('rma_member_data_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
         }
 
         return $uri;
@@ -99,14 +99,15 @@ class SettingValidation
         return $password;
     }
 
-    //validate Password
-    static function validate_rma_user_get_only() {
-        $get = filter_input(INPUT_POST, 'rma_user_get_only');
-        $type = filter_input(INPUT_POST, 'rma_auth_type');
-//        if (0 === strlen($password) && 'HTTP Basic' === $type) {
-//            add_settings_error('rma_auth_type_basic_password', 'rma_name', 'Password may not be empty');
-//        }
+    //validate remote members uri
+    static function validate_rma_get_remote_members() {
+        $uri = filter_input(INPUT_POST, 'rma_get_remote_members');
+        $type = filter_input(INPUT_POST, 'rma_member_get_only');
+        if (0 === strlen($uri) && 'on' === $type) {
+            add_settings_error('rma_get_remote_members', 'rma_name', 'Remote members URI may not be empty');
+        }
 
-        return $get;
+        return $uri;
     }
+
 }

@@ -12,7 +12,7 @@ class SettingFields
 
     static function fieldHtml($field) {
         switch ($field['fieldName']) {
-            case 'rma_user_data_uri':
+            case 'rma_member_data_uri':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
@@ -71,11 +71,16 @@ class SettingFields
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_user_get_only':
+            case 'rma_member_get_only':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 $checked = ($value == 'on') ? ' checked="checked"' : null;
                 echo "<input type='checkbox' id='$name' name='$name' $checked />";
+                break;
+            case 'rma_get_remote_members':
+                $name = $field['fieldName'];
+                $value = get_option($name);
+                echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
             default:
                 break;
