@@ -40,7 +40,7 @@ class RESTData
      * @param type $email
      * @return Json Response
      */
-    public function getData($email)
+    public function getSingleMemberData($email)
     {
         $data = [];
 
@@ -110,13 +110,30 @@ class RESTData
                 'UPDATE ' . $wpdb->prefix . 'member SET password = %s '
                 . 'WHERE email = %s', $hash, $email
             );
-            
+
             return $wpdb->query($stmt);
         } else {
             //do remote POST
             $uri = get_option('rma_set_password_uri');
 
             return wp_remote_post($uri, $args);
+        }
+    }
+
+    /**
+     * Get all members
+     *
+     * @return array All members
+     */
+    public function getAllMembers()
+    {
+        $data = [];
+        $uri = get_option('rma_get_remote_members');
+        if (is_wp_error($data = wp_remote_get($uri, ['headers' => $this->headers]))) {
+            return ['data_error' => true];
+        }
+        if ('200' == $data['response']['code']) {
+            return json_decode($data['body']);
         }
     }
 

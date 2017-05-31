@@ -39,7 +39,7 @@ class SignInValidation
             }
             //get data for valid email
             $rest = new RESTData();
-            $data = $rest->getData($validEmail);
+            $data = $rest->getSingleMemberData($validEmail);
             if (isset($data['data_error'])) {
                 return $data;
             }

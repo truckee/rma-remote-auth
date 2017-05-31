@@ -162,6 +162,9 @@ function rma_init() {
     $table = new MemberTable();
     $table->createMemberTable();
 
+    //experimental
+    var_dump($table->loadMemberTable());die;
+
     $plugin->run();
 }
 

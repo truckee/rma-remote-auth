@@ -64,35 +64,23 @@ jQuery(document).ready(function ($) {
     });
 
     function showKey(key, keyName, userName, password) {
-//        key.show();
         key.parents("tr").show();
-//        keyName.show();
         keyName.parents("tr").show();
-//        userName.hide();
         userName.parents("tr").hide();
-//        password.hide();
         password.parents("tr").hide();
     }
 
     function showBasic(key, keyName, userName, password) {
-//        key.hide();
         key.parents("tr").hide();
-//        keyName.hide();
         keyName.parents("tr").hide();
-//        userName.show();
         userName.parents("tr").show();
-//        password.show();
         password.parents("tr").show();
     }
 
     function showNone(key, keyName, userName, password) {
-//        key.hide();
         key.parents("tr").hide();
-//        keyName.hide();
         keyName.parents("tr").hide();
-//        userName.hide();
         userName.parents("tr").hide();
-//        password.hide();
         password.parents("tr").hide();
     }
 
