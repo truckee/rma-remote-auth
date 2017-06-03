@@ -50,10 +50,13 @@ class RESTData
             $stmt = $wpdb->prepare(
                 'SELECT * FROM ' . $wpdb->prefix . 'member WHERE email = %s', $email
             );
-            if (is_wp_error($data = $wpdb->get_row($stmt))) {
+            if (is_wp_error($data = $wpdb->get_row($stmt, ARRAY_A))) {
                 return ['data_error' => true];
             }
             if (null !== $data) {
+                //locally stored members are by definition active
+                $statusField = get_option('rma_status_field_name');
+                $data[$statusField] = true;
                 return ['member' => $data];
             }
         } else {
@@ -65,7 +68,7 @@ class RESTData
                 return ['data_error' => true];
             }
             if ('200' == $data['response']['code']) {
-                return ['member' => json_decode($data['body'])[0]];
+                return ['member' => json_decode($data['body'], TRUE)[0]];
             }
         }
 
@@ -80,7 +83,6 @@ class RESTData
         $pw = $this->createPasswordHash();
         $sent = $this->setMemberPassword($email, $pw['hash']);
         if (null !== $sent && '200' == $sent['response']['code']) {
-            $body = json_decode($sent['body']);
             $mailer = new Mailer();
             $wasSent = $mailer->registrantEmail($email, $pw['password']);
         }
@@ -133,7 +135,7 @@ class RESTData
             return ['data_error' => true];
         }
         if ('200' == $data['response']['code']) {
-            return json_decode($data['body']);
+            return json_decode($data['body'], true);
         }
     }
 

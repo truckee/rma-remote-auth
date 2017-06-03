@@ -48,16 +48,17 @@ class SignInValidation
                 return ['rma_member_not_found' => true];
             }
             $member = $data['member'];
+
             //is user active?
             $statusField = get_option('rma_status_field_name');
             $statusValue = ('true' === get_option('rma_status_field_value')) ? true : get_option('rma_status_field_value');
-            $memberStatus = $member->$statusField;
+            $memberStatus = $member[$statusField];
             $validSignIn['active'] = ($memberStatus == $statusValue) ? true : false;
             //was password entered
             $password = filter_input(INPUT_POST, '_password');
             $validSignIn['pw_error'] = (empty($password)) ? true : null;
             //may user register?
-            $hash = $member->password;
+            $hash = $member{'password'};
             $validSignIn['register'] = ($validSignIn['active'] && empty($hash)) ? true : false;
             if ($validSignIn['register']) {
                 return $validSignIn;
