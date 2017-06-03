@@ -18,8 +18,10 @@ class Deactivation
         foreach ($keys as $slug) {
             $page = get_page_by_path($slug);
             $pageId = $page->ID;
-            wp_delete_post($pageId);
+            $deleted[] = wp_delete_post($pageId);
         }
+
+        return $deleted;
     }
 
     public function removeTemplates($rmaTemplates) {
@@ -40,6 +42,11 @@ class Deactivation
         foreach ($tables as $tableName) {
             $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}$tableName");
         }
+    }
+
+    public function stopMemberTableUpdate()
+    {
+        wp_clear_scheduled_hook('updateMemberTableEvent');
     }
 
 }

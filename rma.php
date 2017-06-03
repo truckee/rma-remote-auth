@@ -1,5 +1,4 @@
 <?php
-
 /**
   Plugin Name: Remote Member Authorization
   Plugin URI:  https://tbd
@@ -27,7 +26,6 @@
   You should have received a copy of the GNU General Public License
   along with Remote Member Authorization. If not, see {URI to Plugin License}.
  */
-
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
@@ -42,7 +40,7 @@ use Rma\Utility\MemberTable;
 
 const USER_DATA_URI_ERROR = 'Not all RMA options set';
 const INVALID_EMAIL = 'Invalid email';
-const NOT_FOUND = 'Member credentials not found';    
+const NOT_FOUND = 'Member credentials not found';
 const NOT_ACTIVE = 'Member not considered active';
 const PW_ERROR = 'Password not entered';
 const API_ERROR = 'API entries missing';
@@ -53,17 +51,18 @@ const PW_MATCH_ERROR = 'Passwords do not match';
 
 spl_autoload_register('rma_autoloader');
 
-function rma_autoloader($class_name) {
+function rma_autoloader($class_name)
+{
     if (false !== strpos($class_name, 'Rma')) {
         $classes_dir = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
         $class_file = str_replace('\\', DIRECTORY_SEPARATOR, $class_name) . '.php';
         require_once $classes_dir . $class_file;
     }
 }
+add_action('init', 'rmaInit'); // Hook initialization function
 
-add_action('init', 'rma_init'); // Hook initialization function
-
-function rma_init() {
+function rmaInit()
+{
     $plugin = new Plugin(); // Create container
     $plugin['path'] = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR;
     $plugin['url'] = plugin_dir_url(__FILE__);
@@ -159,26 +158,25 @@ function rma_init() {
     $meta_key = '_wp_page_template';
     $meta_value = './rma-registration-template.php';
     $pages->updatePostMeta($id, $meta_key, $meta_value);
-    $table = new MemberTable();
-    $table->createMemberTable();
-
-    //experimental
-    var_dump($table->loadMemberTable());die;
 
     $plugin->run();
 }
+register_activation_hook(__FILE__, ['Rma\Utility\MemberTable', 'memberTableHook']);
 
-function rmaQueueScripts($hook) {
+add_action('updateMemberTableEvent', ['Rma\Utility\MemberTable', 'loadMemberTable']);
+
+function rmaQueueScripts($hook)
+{
     //rmaQueueScripts
     if ($hook != 'settings_page_rma-settings') {
         return;
     }
     wp_enqueue_script('rma_js_script', plugins_url('/js/rma_settings.js', __FILE__), ['jquery']);
 }
+register_deactivation_hook(__FILE__, 'rmaDeactivate');
 
-register_deactivation_hook( __FILE__, 'rmaDeactivate' );
-
-function rmaDeactivate() {
+function rmaDeactivate()
+{
     global $pageDefinitions;
     $deactivate = new Deactivation();
     $deactivate->removePages($pageDefinitions);
@@ -187,4 +185,5 @@ function rmaDeactivate() {
         'member',
     ];
     $deactivate->dropTable($tables);
+    $deactivate->stopMemberTableUpdate();
 }
