@@ -22,12 +22,12 @@ class ForgotPasswordValidation
         if ($validEmail) {
             //check if member
             $rest = new RESTData();
-            if (is_wp_error($data = $rest->getData($validEmail))) {
+            if (is_wp_error($data = $rest->getSingleMemberData($validEmail))) {
                 $validForgot['data_error'] = true;
                 
                 return $validForgot;
             }
-            if (null !== $data && '200' == $data['response']['code']) {
+            if (null !== $data && isset($data['member'])) {
                 $validForgot['valid'] = true;
                 $validForgot['email'] = $validEmail;
                 

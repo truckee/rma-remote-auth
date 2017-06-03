@@ -1,5 +1,4 @@
 <?php
-
 /**
   Plugin Name: Remote Member Authorization
   Plugin URI:  https://tbd
@@ -27,7 +26,6 @@
   You should have received a copy of the GNU General Public License
   along with Remote Member Authorization. If not, see {URI to Plugin License}.
  */
-
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
@@ -38,10 +36,11 @@ use Rma\Pages\SettingsPage;
 use Rma\Plugin;
 use Rma\Templates\PageTemplater;
 use Rma\Utility\Deactivation;
+use Rma\Utility\MemberTable;
 
 const USER_DATA_URI_ERROR = 'Not all RMA options set';
 const INVALID_EMAIL = 'Invalid email';
-const NOT_FOUND = 'Member credentials not found';    
+const NOT_FOUND = 'Member credentials not found';
 const NOT_ACTIVE = 'Member not considered active';
 const PW_ERROR = 'Password not entered';
 const API_ERROR = 'API entries missing';
@@ -52,17 +51,18 @@ const PW_MATCH_ERROR = 'Passwords do not match';
 
 spl_autoload_register('rma_autoloader');
 
-function rma_autoloader($class_name) {
+function rma_autoloader($class_name)
+{
     if (false !== strpos($class_name, 'Rma')) {
         $classes_dir = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
         $class_file = str_replace('\\', DIRECTORY_SEPARATOR, $class_name) . '.php';
         require_once $classes_dir . $class_file;
     }
 }
+add_action('init', 'rmaInit'); // Hook initialization function
 
-add_action('init', 'rma_init'); // Hook initialization function
-
-function rma_init() {
+function rmaInit()
+{
     $plugin = new Plugin(); // Create container
     $plugin['path'] = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR;
     $plugin['url'] = plugin_dir_url(__FILE__);
@@ -87,10 +87,14 @@ function rma_init() {
                 'label' => 'Username'],
             ['fieldName' => 'rma_auth_type_basic_password',
                 'label' => 'Password'],
-            ['fieldName' => 'rma_user_data_uri',
-                'label' => 'Get user data URI',],
-            ['fieldName' => 'rma_user_password_uri',
-                'label' => 'Set user password URI',],
+            ['fieldName' => 'rma_member_data_uri',
+                'label' => 'Get member data URI',],
+            ['fieldName' => 'rma_member_get_only',
+                'label' => 'Get members data only',],
+            ['fieldName' => 'rma_set_password_uri',
+                'label' => 'Set member password URI',],
+            ['fieldName' => 'rma_get_remote_members',
+                'label' => 'Get all members data URI',],
             ['fieldName' => 'rma_status_field_name',
                 'label' => 'Status field name'],
             ['fieldName' => 'rma_status_field_value',
@@ -114,10 +118,6 @@ function rma_init() {
             'class' => 'Rma\Pages\SignIn',
             'function' => 'createSignInForm',
         ),
-//        'member-account' => array(
-//            'title' => __('Your Account', 'personalize-login'),
-//            'content' => '[account-info]'
-//        ),
         'rma-register' => array(
             'title' => __('Register', 'rma-member-auth'),
             'content' => '[rma_register_form]',
@@ -161,20 +161,29 @@ function rma_init() {
 
     $plugin->run();
 }
+register_activation_hook(__FILE__, ['Rma\Utility\MemberTable', 'memberTableHook']);
 
-function rmaQueueScripts($hook) {
+add_action('updateMemberTableEvent', ['Rma\Utility\MemberTable', 'loadMemberTable']);
+
+function rmaQueueScripts($hook)
+{
     //rmaQueueScripts
     if ($hook != 'settings_page_rma-settings') {
         return;
     }
     wp_enqueue_script('rma_js_script', plugins_url('/js/rma_settings.js', __FILE__), ['jquery']);
 }
+register_deactivation_hook(__FILE__, 'rmaDeactivate');
 
-register_deactivation_hook( __FILE__, 'rmaDeactivate' );
-
-function rmaDeactivate() {
+function rmaDeactivate()
+{
     global $pageDefinitions;
     $deactivate = new Deactivation();
     $deactivate->removePages($pageDefinitions);
     $deactivate->removeShortcodes($pageDefinitions);
+    $tables = [
+        'member',
+    ];
+    $deactivate->dropTable($tables);
+    $deactivate->stopMemberTableUpdate();
 }

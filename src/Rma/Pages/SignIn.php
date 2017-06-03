@@ -33,7 +33,7 @@ class SignIn
         $form = $header;
 
         //show error if required options not set
-        if (empty(get_option('rma_user_data_uri')) || empty(get_option('rma_status_field_name')) || empty(get_option('rma_status_field_value'))) {
+        if (empty(get_option('rma_member_data_uri')) || empty(get_option('rma_status_field_name')) || empty(get_option('rma_status_field_value'))) {
             $form .= $formDanger;
             $form .= USER_DATA_URI_ERROR;
             $form .= $footer;
@@ -63,7 +63,7 @@ class SignIn
         }
 
         //if member exists without password, allow to register
-        if (isset($validSignIn['register'])) {
+        if (isset($validSignIn['register']) && $validSignIn['register']) {
             $registerPath = get_permalink(get_page_by_path('rma-register'));
             $_SESSION['rma_email'] = $validSignIn['_email_address'];
             $_SESSION['rma_member_active'] = true;
