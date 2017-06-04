@@ -12,11 +12,12 @@ class SettingValidation
 
     //validate User data URI
     static function validate_rma_member_data_uri() {
+        $type = filter_input(INPUT_POST, 'rma_member_get_only');
         $uri = filter_input(INPUT_POST, 'rma_member_data_uri');
         $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
-        if ($uri !== $uriFiltered) {
+        if ($uri !== $uriFiltered && 'on' !== $type) {
             $invalid = $uri . ' is an invalid User data URI';
-            $empty = 'User data URI may not be empty';
+            $empty = 'Member data URI may not be empty';
             add_settings_error('rma_member_data_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
         }
 
@@ -25,9 +26,10 @@ class SettingValidation
 
     //validate Set user password URI
     static function validate_rma_set_password_uri() {
+        $type = filter_input(INPUT_POST, 'rma_member_get_only');
         $uri = filter_input(INPUT_POST, 'rma_set_password_uri');
         $uriFiltered = filter_var($uri, FILTER_VALIDATE_URL);
-        if ($uri !== $uriFiltered) {
+        if ($uri !== $uriFiltered && 'on' !== $type) {
             $invalid = $uri . ' is an invalid URI';
             $empty = 'Set password URI may not be empty';
             add_settings_error('rma_set_password_uri', 'rma_uri', (empty($uri) ? $empty : $invalid));
