@@ -3,7 +3,7 @@
   Plugin Name: Remote Member Authorization
   Plugin URI:  https://tbd
   Description: Remote member authorization
-  Version:     1.0.2-alpha
+  Version:     0.1
   Author:      Truckee Solutions
   Author URI:  https://tbd
   License:     GPL2

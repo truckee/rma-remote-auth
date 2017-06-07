@@ -15,7 +15,8 @@ class MemberTable
 
     public static function get_instance()
     {
-        if (null === self::$instance) {
+        if ( null === self::$instance )
+        {
             self::$instance = new self;
 //            self::load_files();
         }
@@ -44,10 +45,8 @@ class MemberTable
 
     public static function memberTableHook()
     {
-        if ('on' === get_option('rma_member_get_only')) {
-            self::createMemberTable();
-            self::loadMemberTable();
-        }
+        self::createMemberTable();
+        self::loadMemberTable();
         if (!wp_next_scheduled('updateMemberTableEvent')) {
             wp_schedule_event(time(), 'daily', 'updateMemberTableEvent');
         }
