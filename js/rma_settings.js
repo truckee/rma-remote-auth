@@ -32,18 +32,22 @@ jQuery(document).ready(function ($) {
 
     if (getValue === true) {
         setPassword.parents("tr").hide();
+        dataURI.parents("tr").hide();
         membersGet.parents("tr").show();
     } else {
         setPassword.parents("tr").show();
+        dataURI.parents("tr").show();
         membersGet.parents("tr").hide();
     }
 
     $(get).change(function () {
         if ($(this).is(":checked") === true) {
             setPassword.parents("tr").hide();
+            dataURI.parents("tr").hide();
             membersGet.parents("tr").show();
         } else {
             setPassword.parents("tr").show();
+            dataURI.parents("tr").show();
             membersGet.parents("tr").hide();
         }
     });

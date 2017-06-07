@@ -3,7 +3,7 @@
   Plugin Name: Remote Member Authorization
   Plugin URI:  https://tbd
   Description: Remote member authorization
-  Version:     0.1
+  Version:     1.0.2-alpha
   Author:      Truckee Solutions
   Author URI:  https://tbd
   License:     GPL2
@@ -36,7 +36,6 @@ use Rma\Pages\SettingsPage;
 use Rma\Plugin;
 use Rma\Templates\PageTemplater;
 use Rma\Utility\Deactivation;
-use Rma\Utility\MemberTable;
 
 const USER_DATA_URI_ERROR = 'Not all RMA options set';
 const INVALID_EMAIL = 'Invalid email';
@@ -87,10 +86,10 @@ function rmaInit()
                 'label' => 'Username'],
             ['fieldName' => 'rma_auth_type_basic_password',
                 'label' => 'Password'],
-            ['fieldName' => 'rma_member_data_uri',
-                'label' => 'Get member data URI',],
             ['fieldName' => 'rma_member_get_only',
                 'label' => 'Get members data only',],
+            ['fieldName' => 'rma_member_data_uri',
+                'label' => 'Get member data URI',],
             ['fieldName' => 'rma_set_password_uri',
                 'label' => 'Set member password URI',],
             ['fieldName' => 'rma_get_remote_members',
