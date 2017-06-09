@@ -44,7 +44,7 @@ class MemberTable
 
     public static function memberTableHook()
     {
-        if ('on' === get_option('rma_member_get_only')) {
+        if ('on' === get_option('rmaOnlyGet')) {
             self::createMemberTable();
             self::loadMemberTable();
         }
@@ -63,8 +63,8 @@ class MemberTable
     {
         global $wpdb;
         $tableName = $wpdb->prefix . 'member';
-        $statusFieldName = get_option('rma_status_field_name');
-        $statusValue = get_option('rma_status_field_value');
+        $statusFieldName = get_option('rmaStatusName');
+        $statusValue = get_option('rmaStatusValue');
         $rest = new RESTData();
         $members = $rest->getAllMembers();
         $n = 0;
