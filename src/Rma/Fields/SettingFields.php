@@ -38,12 +38,12 @@ class SettingFields
                 $fieldNone = ($value == 'None') ? "checked='checked' " : '';
                 $fieldAPI = ($value == 'API key') ? "checked='checked' " : '';
                 $fieldBasic = ($value == 'HTTP Basic') ? "checked='checked' " : '';
-                echo "<input type='radio' id='$name' name='$name' value='API key' " .
+                echo "<input type='radio' id='authAPI' name='$name' value='API key' " .
                 $fieldAPI .
                 " />API key<br>";
-                echo "<input type='radio' id='$name' name='$name' value='HTTP Basic'" .
+                echo "<input type='radio' id='authHTTP' name='$name' value='HTTP Basic'" .
                 $fieldBasic . ' />HTTP Basic<br>';
-                echo "<input type='radio' id='$name' name='$name' value='None'" .
+                echo "<input type='radio' id='authNone' name='$name' value='None'" .
                 $fieldNone . ' />None';
                 break;
             case 'rmaApiKey':
