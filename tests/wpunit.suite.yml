@@ -1,0 +1,22 @@
+# Codeception Test Suite Configuration
+#
+# Suite for unit or integration tests that require WordPress functions and classes.
+
+actor: WpunitTester
+modules:
+    enabled:
+        - WPLoader
+        - \Helper\Wpunit
+    config:
+        WPLoader:
+            wpRootFolder: "/home/george/rmasite"
+            dbName: "wpTests"
+            dbHost: "localhost"
+            dbUser: "root"
+            dbPassword: "aardvark"
+            tablePrefix: "wp_"
+            domain: "rmasite"
+            adminEmail: "admin@bogus.info"
+            title: "UUFNN"        
+            plugins: ['rma/rma.php']
+            activatePlugins: ['rma/rma.php']
