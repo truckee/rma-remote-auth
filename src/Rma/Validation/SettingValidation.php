@@ -36,11 +36,11 @@ class SettingValidation
         return $uri;
     }
 
-    //validate Sstatus field name
+    //validate Status field name
     static function validate_rmaStatusName() {
         $fieldName = filter_input(INPUT_POST, 'rmaStatusName');
         if (empty($fieldName)) {
-            add_settings_error('rmaStatusName', 'rma_key', 'Field name may not be empty');
+            add_settings_error('rmaStatusName', 'rma_key', 'Status field name may not be empty');
         }
 
         return $fieldName;
@@ -59,6 +59,7 @@ class SettingValidation
     //validate API key
     static function validate_rmaApiKey() {
         $key = filter_input(INPUT_POST, 'rmaApiKey');
+        $type = filter_input(INPUT_POST, 'rmaAuthType');
         if (0 === strlen($key) && 'API key' === $type) {
             add_settings_error('rmaApiKey', 'rma_key', 'API key may not be empty');
         }
