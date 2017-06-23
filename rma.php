@@ -3,7 +3,7 @@
   Plugin Name: Remote Member Authorization
   Plugin URI:  https://tbd
   Description: Remote member authorization
-  Version:     0.1
+  Version:     1.0.2-alpha
   Author:      Truckee Solutions
   Author URI:  https://tbd
   License:     GPL2
@@ -36,7 +36,6 @@ use Rma\Pages\SettingsPage;
 use Rma\Plugin;
 use Rma\Templates\PageTemplater;
 use Rma\Utility\Deactivation;
-use Rma\Utility\MemberTable;
 
 const USER_DATA_URI_ERROR = 'Not all RMA options set';
 const INVALID_EMAIL = 'Invalid email';
@@ -77,27 +76,27 @@ function rmaInit()
         'section_heading' => '',
         'submit_label' => 'Save stuff',
         'options' => [
-            ['fieldName' => 'rma_auth_type',
+            ['fieldName' => 'rmaAuthType',
                 'label' => 'Authentication type'],
-            ['fieldName' => 'rma_auth_type_api_key',
+            ['fieldName' => 'rmaApiKey',
                 'label' => 'API key'],
-            ['fieldName' => 'rma_auth_type_api_key_field_name',
+            ['fieldName' => 'rmaKeyFieldName',
                 'label' => 'API key field name'],
-            ['fieldName' => 'rma_auth_type_basic_username',
+            ['fieldName' => 'rmaBasicUsername',
                 'label' => 'Username'],
-            ['fieldName' => 'rma_auth_type_basic_password',
+            ['fieldName' => 'rmaBasicPassword',
                 'label' => 'Password'],
-            ['fieldName' => 'rma_member_data_uri',
-                'label' => 'Get member data URI',],
-            ['fieldName' => 'rma_member_get_only',
+            ['fieldName' => 'rmaOnlyGet',
                 'label' => 'Get members data only',],
-            ['fieldName' => 'rma_set_password_uri',
+            ['fieldName' => 'rmaDataURI',
+                'label' => 'Get member data URI',],
+            ['fieldName' => 'rmaSetPasswordURI',
                 'label' => 'Set member password URI',],
-            ['fieldName' => 'rma_get_remote_members',
+            ['fieldName' => 'rmaAllMembersURI',
                 'label' => 'Get all members data URI',],
-            ['fieldName' => 'rma_status_field_name',
+            ['fieldName' => 'rmaStatusName',
                 'label' => 'Status field name'],
-            ['fieldName' => 'rma_status_field_value',
+            ['fieldName' => 'rmaStatusValue',
                 'label' => 'Active status value'],
         ],
     ];

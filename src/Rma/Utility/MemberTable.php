@@ -15,8 +15,7 @@ class MemberTable
 
     public static function get_instance()
     {
-        if ( null === self::$instance )
-        {
+        if (null === self::$instance) {
             self::$instance = new self;
 //            self::load_files();
         }
@@ -45,8 +44,10 @@ class MemberTable
 
     public static function memberTableHook()
     {
-        self::createMemberTable();
-        self::loadMemberTable();
+        if ('on' === get_option('rmaOnlyGet')) {
+            self::createMemberTable();
+            self::loadMemberTable();
+        }
         if (!wp_next_scheduled('updateMemberTableEvent')) {
             wp_schedule_event(time(), 'daily', 'updateMemberTableEvent');
         }
@@ -62,8 +63,8 @@ class MemberTable
     {
         global $wpdb;
         $tableName = $wpdb->prefix . 'member';
-        $statusFieldName = get_option('rma_status_field_name');
-        $statusValue = get_option('rma_status_field_value');
+        $statusFieldName = get_option('rmaStatusName');
+        $statusValue = get_option('rmaStatusValue');
         $rest = new RESTData();
         $members = $rest->getAllMembers();
         $n = 0;

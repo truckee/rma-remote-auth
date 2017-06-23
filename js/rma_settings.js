@@ -1,24 +1,24 @@
 jQuery(document).ready(function ($) {
     // $() will work as an alias for jQuery() inside of this function
-    var authType = $("input:radio[name='rma_auth_type']");
-    var authTypeValue= $("input:radio[name=rma_auth_type]:checked").val();
+    var authType = $("input:radio[name='rmaAuthType']");
+    var authTypeValue= $("input:radio[name=rmaAuthType]:checked").val();
 
-    var key = $("#rma_auth_type_api_key");
-    var keyName = $("#rma_auth_type_api_key_field_name");
+    var key = $("#rmaApiKey");
+    var keyName = $("#rmaKeyFieldName");
 
-    var userName = $("#rma_auth_type_basic_username");
-    var password = $("#rma_auth_type_basic_password");
+    var userName = $("#rmaBasicUsername");
+    var password = $("#rmaBasicPassword");
 
-    var dataURI = $("#rma_member_data_uri");
+    var dataURI = $("#rmaDataURI");
     var dataURIValue = dataURI.val();
 
-    var setPassword = $("#rma_set_password_uri");
-    var setPasswordValue = $("#rma_set_password_uri").val();
+    var setPassword = $("#rmaSetPasswordURI");
+    var setPasswordValue = $("#rmaSetPasswordURI").val();
 
-    var get = $("input:checkbox[name=rma_member_get_only]");
+    var get = $("input:checkbox[name=rmaOnlyGet]");
     var getValue = get.is(":checked");
 
-    var membersGet = $("#rma_get_remote_members");
+    var membersGet = $("#rmaAllMembersURI");
     var membersGetValue = membersGet.val();
 
     //set initial display
@@ -32,18 +32,22 @@ jQuery(document).ready(function ($) {
 
     if (getValue === true) {
         setPassword.parents("tr").hide();
+        dataURI.parents("tr").hide();
         membersGet.parents("tr").show();
     } else {
         setPassword.parents("tr").show();
+        dataURI.parents("tr").show();
         membersGet.parents("tr").hide();
     }
 
     $(get).change(function () {
         if ($(this).is(":checked") === true) {
             setPassword.parents("tr").hide();
+            dataURI.parents("tr").hide();
             membersGet.parents("tr").show();
         } else {
             setPassword.parents("tr").show();
+            dataURI.parents("tr").show();
             membersGet.parents("tr").hide();
         }
     });
@@ -85,7 +89,7 @@ jQuery(document).ready(function ($) {
     }
 
     function resetValues() {
-        if (authTypeValue === $("input:radio[name=rma_auth_type]:checked").val()) {
+        if (authTypeValue === $("input:radio[name=rmaAuthType]:checked").val()) {
             dataURI.val(dataURIValue);
             setPassword.val(setPasswordValue);
             membersGet.val(membersGetValue);

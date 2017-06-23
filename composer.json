@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "lucatume/wp-browser": "dev-wpdb-sql-dump-fix"
+    }
+}

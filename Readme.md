@@ -25,20 +25,23 @@ The settings will appear under the admin's Settings menu with the name `Remote M
 
 		- for HTTP Basic, enter the **Username** and **Password** for a user with search and update privileges
 
+	- **Remote host URIs**:
 
-    - **Remote host URIs**:
+		- **Get member data only**: Check this box if the RESTful API you're using does not provide POST privileges. When checked the plugin will create a member table in the WordPress database for maintaining member data. The member table is updated daily.
 
-		- **Get user data URI**: Returns password hash for a member email address.   Example: _https://www.example.com/api/get_user_
+			- If **Get member data only** checked:
 
-    		The RMA plugin assumes that the member's email address is appended to the URI. The request sent will be _https://www.example.com/get_user/someuser@yoursite.org_
-    		
-		- **Get user data only**: Check this box if the RESTful API you're using does not provide POST privileges. When checked the plugin will create a member table in the WordPress database for maintaining user data. The member table is updated daily.
- 
-		- **Get all members data URI**: This option appears only when the *Get user data only* option IS checked. When the plugin is activated all active members are downloaded from the remote source at the URI specified here to a local member database table maintained by the plugin. Once a day (using a WordPress cron job) local data is updated.
+				- **Get all members data URI**: This option appears only when the *Get member data only* option IS checked. When the plugin is activated all active members are downloaded from the remote source at the URI specified here to a local member database table maintained by the plugin. Once a day (using a WordPress cron job) local data is updated.
 
-        - **Set user password URI**: This option appears only when the *Get user data only* option IS NOT checked. The RMA plugin assumes that active members without a password hash in the member database have never registered. When signing in without a password the member is directed to a link to register. Upon clicking that link a random password is created and emailed to the member. The plugin also updates the member database with a password hash. Example: _https://www.example.com/api/set_password_
+			- If **Get member data only** NOT checked:
 
-            For setting and resetting passwords, the member email address and password hash are sent in the request header. 
+				- **Get member data URI**: This option appears only when the *Get member data only* option IS NOT checked. Returns password hash for a member email address.   Example: _https://www.example.com/api/get_user_
+
+					The RMA plugin assumes that the member's email address is appended to the URI. The request sent will be _https://www.example.com/get_user/someuser@yoursite.org_
+
+				- **Set member password URI**: This option appears only when the *Get member data only* option IS NOT checked. The RMA plugin assumes that active members without a password hash in the member database have never registered. When signing in without a password the member is directed to a link to register. Upon clicking that link a random password is created and emailed to the member. The plugin also updates the member database with a password hash. Example: _https://www.example.com/api/set_password_
+
+					For setting and resetting passwords, the member email address and password hash are sent in the request header.
 
 	- **Remote host field names**:
 
@@ -48,9 +51,9 @@ The settings will appear under the admin's Settings menu with the name `Remote M
 
 - **Add restricted content**
 
-	- For each page of restricted content set its template to "Restricted member content" 
+	- For each page of restricted content set its template to "Restricted member content"
 
-        When anyone not already signed in clicks on a menu item for a page of restricted content they will be directed to the member sign in form. Sign in is with an email address and a password. The form includes a link for cases of  forgotten password.
+		When anyone not already signed in clicks on a menu item for a page of restricted content they will be directed to the member sign in form. Sign in is with an email address and a password. The form includes a link for cases of  forgotten password.
 
 ### Testing:
 
