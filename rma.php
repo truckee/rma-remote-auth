@@ -62,6 +62,9 @@ add_action('init', 'rmaInit'); // Hook initialization function
 
 function rmaInit()
 {
+    if (!session_id()) {
+        session_start();
+    }
     $plugin = new Plugin(); // Create container
     $plugin['path'] = realpath(plugin_dir_path(__FILE__)) . DIRECTORY_SEPARATOR;
     $plugin['url'] = plugin_dir_url(__FILE__);
