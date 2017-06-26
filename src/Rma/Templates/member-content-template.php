@@ -1,6 +1,8 @@
 <?php
 /* Template Name: Member Content Template */
-
+if (!session_id()) {
+    session_start();
+}
 //Check if rma_member_active is set
 if (isset($_SESSION['rma_member_active'])) {
     get_header();
