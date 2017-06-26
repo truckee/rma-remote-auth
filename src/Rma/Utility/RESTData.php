@@ -105,6 +105,7 @@ class RESTData
             'httpversion' => '1.0',
             'blocking' => true,
             'headers' => $this->headers,
+            'timeout' => 10,
             'body' =>
             ['email' => $email, 'hash' => $hash],
         ];
@@ -120,7 +121,7 @@ class RESTData
         } else {
             //do remote POST
             $uri = get_option('rmaSetPasswordURI');
-
+//            var_dump($uri);die;
             return wp_remote_post($uri, $args);
         }
     }
