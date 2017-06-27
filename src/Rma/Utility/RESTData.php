@@ -64,7 +64,10 @@ class RESTData
             //create complete $_GET uri based on authentication type
             $getURI = $this->uri . '/' . $email;
             //could be null, code = 404
-            if (is_wp_error($data = wp_remote_get($getURI, ['headers' => $this->headers]))) {
+            if (is_wp_error($data = wp_remote_get($getURI, [
+                'headers' => $this->headers,
+                'timeout' => 10,
+                ]))) {
                 return ['data_error' => true];
             }
             if ('200' == $data['response']['code']) {
@@ -99,6 +102,7 @@ class RESTData
             'method' => 'POST',
             'timeout' => 45,
             'redirection' => 5,
+            'timeout' => 10,
             'httpversion' => '1.0',
             'blocking' => true,
             'headers' => $this->headers,
