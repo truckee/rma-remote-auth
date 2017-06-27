@@ -50,8 +50,8 @@ class SignInValidation
             $member = $data['member'];
 
             //is user active?
-            $statusField = get_option('rma_status_field_name');
-            $statusValue = ('true' === get_option('rma_status_field_value')) ? true : get_option('rma_status_field_value');
+            $statusField = get_option('rmaStatusName');
+            $statusValue = ('true' === get_option('rmaStatusValue')) ? true : get_option('rmaStatusValue');
             $memberStatus = $member[$statusField];
             $validSignIn['active'] = ($memberStatus == $statusValue) ? true : false;
             //was password entered

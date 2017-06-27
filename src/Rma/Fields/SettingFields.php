@@ -12,72 +12,67 @@ class SettingFields
 
     static function fieldHtml($field) {
         switch ($field['fieldName']) {
-            case 'rma_member_data_uri':
+            case 'rmaDataURI':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_set_password_uri':
+            case 'rmaSetPasswordURI':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_reset_password_uri':
-                $name = $field['fieldName'];
-                $value = get_option($name);
-                echo "<input type='text' size='60' id='$name' name='$name' value='$value' />";
-                break;
-            case 'rma_status_field_name':
+            case 'rmaStatusName':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_status_field_value':
+            case 'rmaStatusValue':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_auth_type':
+            case 'rmaAuthType':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 $fieldNone = ($value == 'None') ? "checked='checked' " : '';
                 $fieldAPI = ($value == 'API key') ? "checked='checked' " : '';
                 $fieldBasic = ($value == 'HTTP Basic') ? "checked='checked' " : '';
-                echo "<input type='radio' id='$name' name='$name' value='API key' " .
+                echo "<input type='radio' id='authAPI' name='$name' value='API key' " .
                 $fieldAPI .
                 " />API key<br>";
-                echo "<input type='radio' id='$name' name='$name' value='HTTP Basic'" .
+                echo "<input type='radio' id='authHTTP' name='$name' value='HTTP Basic'" .
                 $fieldBasic . ' />HTTP Basic<br>';
-                echo "<input type='radio' id='$name' name='$name' value='None'" .
+                echo "<input type='radio' id='authNone' name='$name' value='None'" .
                 $fieldNone . ' />None';
                 break;
-            case 'rma_auth_type_api_key':
+            case 'rmaApiKey':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' size='40' name='$name' value='$value' />";
                 break;
-            case 'rma_auth_type_api_key_field_name':
+            case 'rmaKeyFieldName':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_auth_type_basic_username':
+            case 'rmaBasicUsername':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_auth_type_basic_password':
+            case 'rmaBasicPassword':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";
                 break;
-            case 'rma_member_get_only':
+            case 'rmaOnlyGet':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 $checked = ($value == 'on') ? ' checked="checked"' : null;
                 echo "<input type='checkbox' id='$name' name='$name' $checked />";
                 break;
-            case 'rma_get_remote_members':
+            case 'rmaAllMembersURI':
                 $name = $field['fieldName'];
                 $value = get_option($name);
                 echo "<input type='text' id='$name' name='$name' value='$value' />";

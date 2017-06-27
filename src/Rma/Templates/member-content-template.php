@@ -1,6 +1,5 @@
 <?php
 /* Template Name: Member Content Template */
-
 //Check if rma_member_active is set
 if (isset($_SESSION['rma_member_active'])) {
     get_header();
@@ -11,6 +10,8 @@ if (isset($_SESSION['rma_member_active'])) {
             while (have_posts()) : the_post();
                 get_template_part('partials/content', 'page');
                 comments_template('/comments.php');
+                the_title();
+                '<div class="entry">' . the_content() . '</div>';
             endwhile; // End of the loop.  
             ?>
 

@@ -16,12 +16,12 @@ class RESTData
 
     public function __construct()
     {
-        $this->uri = get_option('rma_member_data_uri');
-        $key = get_option('rma_auth_type_api_key');
-        $keyName = get_option('rma_auth_type_api_key_field_name');
-        $user = get_option('rma_auth_type_basic_username');
-        $password = get_option('rma_auth_type_basic_password');
-        $type = get_option('rma_auth_type');
+        $this->uri = get_option('rmaDataURI');
+        $key = get_option('rmaApiKey');
+        $keyName = get_option('rmaKeyFieldName');
+        $user = get_option('rmaBasicUsername');
+        $password = get_option('rmaBasicPassword');
+        $type = get_option('rmaAuthType');
 
         switch ($type) {
             case 'API key':
@@ -44,7 +44,7 @@ class RESTData
     {
         $data = [];
 
-        if ('on' == get_option('rma_member_get_only')) {
+        if ('on' == get_option('rmaOnlyGet')) {
             //do local get
             global $wpdb;
             $stmt = $wpdb->prepare(
@@ -55,7 +55,7 @@ class RESTData
             }
             if (null !== $data) {
                 //locally stored members are by definition active
-                $statusField = get_option('rma_status_field_name');
+                $statusField = get_option('rmaStatusName');
                 $data[$statusField] = true;
                 return ['member' => $data];
             }
@@ -106,10 +106,11 @@ class RESTData
             'httpversion' => '1.0',
             'blocking' => true,
             'headers' => $this->headers,
+            'timeout' => 10,
             'body' =>
             ['email' => $email, 'hash' => $hash],
         ];
-        if ('on' == get_option('rma_member_get_only')) {
+        if ('on' == get_option('rmaOnlyGet')) {
             //do local save
             global $wpdb;
             $stmt = $wpdb->prepare(
@@ -120,8 +121,8 @@ class RESTData
             return $wpdb->query($stmt);
         } else {
             //do remote POST
-            $uri = get_option('rma_set_password_uri');
-
+            $uri = get_option('rmaSetPasswordURI');
+//            var_dump($uri);die;
             return wp_remote_post($uri, $args);
         }
     }
@@ -134,7 +135,7 @@ class RESTData
     public function getAllMembers()
     {
         $data = [];
-        $uri = get_option('rma_get_remote_members');
+        $uri = get_option('rmaAllMembersURI');
         if (is_wp_error($data = wp_remote_get($uri, ['headers' => $this->headers]))) {
             return ['data_error' => true];
         }
